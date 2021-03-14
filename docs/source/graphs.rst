@@ -1,0 +1,6 @@
+============
+Graphs
+============
+
+.. automodule:: optrees
+    :members:
