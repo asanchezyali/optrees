@@ -4,24 +4,17 @@ import numpy as np
 
 class Vertex:
 
-    def __init__(self, label: str = None):
+    def __init__(self, label):
         self.__label = label
         self.__neighbors = dict()
         self.__edges = dict()
 
     @property
-    def label(self):
+    def label(self) -> str:
         return self.__label
 
-    @label.setter
-    def label(self, label):
-        if self.__label is None:
-            self.__label = label
-        else:
-            raise ValueError('This Vertex already has label.')
-
     @property
-    def neighbors(self):
+    def neighbors(self) -> dict:
         return self.__neighbors
 
     def add_neighbor(self, vertex: Vertex, weight: float = None):
@@ -40,11 +33,11 @@ class Vertex:
     def del_neighbor(self):
         pass
 
-    def neighbor(self, label: str):
+    def neighbor(self, label: str) -> Vertex:
         return self.neighbors.get(label)
 
     @property
-    def edges(self):
+    def edges(self) -> dict:
         return self.__edges
 
     def add_edge(self, edge: Edge):
@@ -53,82 +46,84 @@ class Vertex:
         else:
             raise ValueError('This edge already exists.')
 
-    def edge(self, label: str):
+    def edge(self, label: str) -> str:
         return self.edges.get(label)
 
 
 class Edge:
 
-    def __init__(self, label: str = None, lvertex: Vertex = None, rvertex: Vertex = None, weight: float = None):
+    def __init__(self, label, lvertex: Vertex = None, rvertex: Vertex = None, weight: float = None):
         self.__label = label
         self.__lvertex = lvertex
         self.__rvertex = rvertex
         self.__weight = weight
 
     @property
-    def lvertex(self):
+    def label(self) -> str:
+        return self.__label
+
+    @property
+    def lvertex(self) -> Vertex:
         return self.__lvertex
 
     @lvertex.setter
     def lvertex(self, vertex: Vertex):
         if self.__lvertex is None:
             self.__lvertex = vertex
+            vertex.add_edge(self)
         else:
             raise ValueError('This edge already has left vertex.')
 
     @property
-    def rvertex(self):
+    def rvertex(self) -> Vertex:
         return self.__rvertex
 
     @rvertex.setter
     def rvertex(self, vertex: Vertex):
         if self.__rvertex is None:
             self.__rvertex = vertex
+            vertex.add_edge(self)
         else:
             raise ValueError('This edge already has right vertex.')
 
     @property
-    def weight(self):
+    def weight(self) -> float:
         return self.__weight
 
     @weight.setter
     def weight(self, weight: float):
         self.__weight = weight
 
-    @property
-    def label(self):
-        return self.__label
-
-    @label.setter
-    def label(self, label: str):
-        if self.__label is None:
-            self.__label = label
-        else:
-            raise ValueError('This edge already has a label.')
-
 
 class OrientedEdge(Edge):
-    def __init__(self, label: str = None, start: Vertex = None, end: Vertex = None, weight: float = None):
+    def __init__(self, label, start: Vertex = None, end: Vertex = None, weight: float = None):
         super().__init__(label=label, lvertex=start, rvertex=end, weight=weight)
-        self.__start = super().lvertex
-        self.__end = super().rvertex
+        self.__start = super(OrientedEdge, self).lvertex
+        self.__end = super(OrientedEdge, self).rvertex
 
     @property
-    def start(self):
+    def start(self) -> Vertex:
         return self.__start
 
-    # TODO: This setter is wrong.
     @start.setter
     def start(self, vertex: Vertex):
-        super().lvertex = vertex
+        if self.__start is None:
+            super(OrientedEdge, type(self)).lvertex.fset(self, vertex)
+            self.__start = vertex
+        else:
+            raise ValueError('This edge already has start vertex.')
 
     @property
-    def end(self):
+    def end(self) -> Vertex:
         return self.__end
 
     @end.setter
     def end(self, vertex: Vertex):
-        super().rvertex = vertex
+        if self.__end is None:
+            super(OrientedEdge, type(self)).rvertex.fset(self, vertex)
+            self.__end = vertex
+        else:
+            raise ValueError('This edge already has end vertex.')
 
 
 class OrientedGraph:
@@ -164,87 +159,6 @@ class OrientedGraph:
         pass
 
 
-class Vertex2(object):
-    """ This class defines the basic unit of the graphs the vertices.
-    Each vertex has a set of neighbors and weights.
-
-    Args:
-        ``id_vertex`` (str): It is a string o number.
-    """
-
-    def __init__(self, id_vertex: str):
-        # Indicator from vertex:
-        self.__id = id_vertex
-
-        # Dictionary containing the neighbors of the vertex with the weight
-        # of the connection:
-        self.__neighbors = dict()
-
-        # Set with edges incidents to the vertex:
-        self.edges = set()
-        self.edges_id = set()
-
-    @property
-    def id(self):
-        return self.__id
-
-    @id.setter
-    def id(self, new_id):
-        self.__id = new_id
-
-    @property
-    def neighbors(self):
-        return list(self.__neighbors.keys())
-
-    @neighbors.setter
-    def neighbors(self, vertex):
-        label, weight = range(2)
-        self.__neighbors[vertex[label]] = vertex[weight]
-
-    # The print the vertex:
-    def __str__(self) -> str:
-        """ This method defines the representation of each vertex and its
-        neighbors.
-
-        Returns:
-            *str*: Out per terminal.
-        """
-        vertices = [vertex for vertex in self.neighbors]
-        return str(self.id) + ' connected to: ' + str(vertices)
-
-    # Add neighbour to the vertex:
-    def add_neighbour(self, node: Vertex, weighing: float = 0) -> None:
-        """ This method allows you to add neighbors with a weight of the
-        relation.
-
-        Args:
-            ``node`` (Vertex): It is a Vertex object.
-            ``weighing`` (float): It is a float that indicates the weight of the
-            relationship between vertices.
-
-        """
-
-        # Neighbors:
-        self.neighbors = (node.id, weighing)
-
-        # Edges:
-        if self != node:
-            self.edges.add((self, node, weighing))
-            self.edges_id.add((self.id, node.id, weighing))
-
-    # Consults the weighing between the vertex and neighbour:
-    def get_weighing(self, neighbour_id: str) -> float:
-        """ This method consults the weight of the connection between a
-        neighbor.
-
-        Args:
-            ``neighbour_id``: It is a string that is a vertex id.
-
-        Returns:
-            *float*: It is the weight for the edge between self vertex and
-            other vertex.
-        """
-        return self.neighbors.get(neighbour_id)
 
 
 class OrientedGraph2(object):
