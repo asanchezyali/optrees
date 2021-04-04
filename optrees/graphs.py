@@ -2,7 +2,169 @@ from __future__ import annotations
 import numpy as np
 
 
-class Vertex(object):
+class Vertex:
+
+    def __init__(self, label: str = None):
+        self.__label = label
+        self.__neighbors = dict()
+        self.__edges = dict()
+
+    @property
+    def label(self):
+        return self.__label
+
+    @label.setter
+    def label(self, label):
+        if self.__label is None:
+            self.__label = label
+        else:
+            raise ValueError('This Vertex already has label.')
+
+    @property
+    def neighbors(self):
+        return self.__neighbors
+
+    def add_neighbor(self, vertex: Vertex, weight: float = None):
+        if self is not vertex:
+            self.__neighbors[vertex.label] = vertex
+            edge = Edge()
+            edge.lvertex = self
+            edge.rvertex = vertex
+            edge.weight = weight
+            edge.label = '{}-{}'.format(self.label, vertex.label)
+            self.add_edge(edge)
+        else:
+            raise ValueError('It is the same vertex.')
+
+    # TODO: Implement the delete method to neighbors.
+    def del_neighbor(self):
+        pass
+
+    def neighbor(self, label: str):
+        return self.neighbors.get(label)
+
+    @property
+    def edges(self):
+        return self.__edges
+
+    def add_edge(self, edge: Edge):
+        if edge not in self.__edges.values() and edge.label not in self.__edges.keys():
+            self.__edges[edge.label] = edge
+        else:
+            raise ValueError('This edge already exists.')
+
+    def edge(self, label: str):
+        return self.edges.get(label)
+
+
+class Edge:
+
+    def __init__(self, label: str = None, lvertex: Vertex = None, rvertex: Vertex = None, weight: float = None):
+        self.__label = label
+        self.__lvertex = lvertex
+        self.__rvertex = rvertex
+        self.__weight = weight
+
+    @property
+    def lvertex(self):
+        return self.__lvertex
+
+    @lvertex.setter
+    def lvertex(self, vertex: Vertex):
+        if self.__lvertex is None:
+            self.__lvertex = vertex
+        else:
+            raise ValueError('This edge already has left vertex.')
+
+    @property
+    def rvertex(self):
+        return self.__rvertex
+
+    @rvertex.setter
+    def rvertex(self, vertex: Vertex):
+        if self.__rvertex is None:
+            self.__rvertex = vertex
+        else:
+            raise ValueError('This edge already has right vertex.')
+
+    @property
+    def weight(self):
+        return self.__weight
+
+    @weight.setter
+    def weight(self, weight: float):
+        self.__weight = weight
+
+    @property
+    def label(self):
+        return self.__label
+
+    @label.setter
+    def label(self, label: str):
+        if self.__label is None:
+            self.__label = label
+        else:
+            raise ValueError('This edge already has a label.')
+
+
+class OrientedEdge(Edge):
+    def __init__(self, label: str = None, start: Vertex = None, end: Vertex = None, weight: float = None):
+        super().__init__(label=label, lvertex=start, rvertex=end, weight=weight)
+        self.__start = super().lvertex
+        self.__end = super().rvertex
+
+    @property
+    def start(self):
+        return self.__start
+
+    # TODO: This setter is wrong.
+    @start.setter
+    def start(self, vertex: Vertex):
+        super().lvertex = vertex
+
+    @property
+    def end(self):
+        return self.__end
+
+    @end.setter
+    def end(self, vertex: Vertex):
+        super().rvertex = vertex
+
+
+class OrientedGraph:
+
+    def __init__(self, name=None):
+        self.__name = name
+        self.__vertices = dict()
+        self.__edges = dict()
+
+    @property
+    def name(self):
+        return self.__name
+
+    @name.setter
+    def name(self, name):
+        self.__name = name
+
+    @property
+    def vertices(self):
+        return self.__vertices
+
+    @property
+    def edges(self):
+        return self.__edges
+
+    def add_edges(self, edges):
+        # TODO: Usar listas de tripletas (vertex_left, vertex_right, weight).
+        vertex_left, vertex_right, weight = range(3)
+
+        pass
+
+    def add_vertex(self, neighbors=None):
+        pass
+
+
+class Vertex2(object):
     """ This class defines the basic unit of the graphs the vertices.
     Each vertex has a set of neighbors and weights.
 
@@ -12,20 +174,34 @@ class Vertex(object):
 
     def __init__(self, id_vertex: str):
         # Indicator from vertex:
-        self.id = id_vertex
+        self.__id = id_vertex
 
         # Dictionary containing the neighbors of the vertex with the weight
         # of the connection:
-        self.connected_to = dict()
-
-        # List with neighboring vertices:
-        self.neighbors = list()
+        self.__neighbors = dict()
 
         # Set with edges incidents to the vertex:
         self.edges = set()
         self.edges_id = set()
 
-    # Print the vertex:
+    @property
+    def id(self):
+        return self.__id
+
+    @id.setter
+    def id(self, new_id):
+        self.__id = new_id
+
+    @property
+    def neighbors(self):
+        return list(self.__neighbors.keys())
+
+    @neighbors.setter
+    def neighbors(self, vertex):
+        label, weight = range(2)
+        self.__neighbors[vertex[label]] = vertex[weight]
+
+    # The print the vertex:
     def __str__(self) -> str:
         """ This method defines the representation of each vertex and its
         neighbors.
@@ -33,7 +209,7 @@ class Vertex(object):
         Returns:
             *str*: Out per terminal.
         """
-        vertices = [vertex for vertex in self.connected_to]
+        vertices = [vertex for vertex in self.neighbors]
         return str(self.id) + ' connected to: ' + str(vertices)
 
     # Add neighbour to the vertex:
@@ -49,23 +225,12 @@ class Vertex(object):
         """
 
         # Neighbors:
-        self.connected_to[node.id] = weighing
-        self.neighbors.append(node)
+        self.neighbors = (node.id, weighing)
 
         # Edges:
         if self != node:
             self.edges.add((self, node, weighing))
             self.edges_id.add((self.id, node.id, weighing))
-
-    # Consults all connections with the vertex:
-    def get_neighbours(self) -> list:
-        """ This method allows you to consult who are the neighbors of each
-        vertex.
-
-        Returns:
-            *list*: Vertex neighbors.
-        """
-        return list(self.connected_to.keys())
 
     # Consults the weighing between the vertex and neighbour:
     def get_weighing(self, neighbour_id: str) -> float:
@@ -79,10 +244,10 @@ class Vertex(object):
             *float*: It is the weight for the edge between self vertex and
             other vertex.
         """
-        return self.connected_to.get(neighbour_id)
+        return self.neighbors.get(neighbour_id)
 
 
-class OrientedGraph(object):
+class OrientedGraph2(object):
     """ This class defines the general structure for a graph. Initializes a
     graph object. If no dictionary or None is given, an empty dictionary will be
     used.
@@ -178,7 +343,7 @@ class OrientedGraph(object):
         """
         return list(self.vertices.keys())
 
-    def add_edge(self, edge: tuple, weighing: float = 0):
+    def add_edge(self, edge: tuple, weight: float = 0):
         """ This method allow you to add new edges to the graph.
 
         Args:
@@ -208,7 +373,8 @@ class OrientedGraph(object):
         else:
             vertex_two = self.add_vertex(edge[end_vertex])
 
-        vertex_one.add_neighbour(vertex_two, weighing)
+        vertex_one.add_neighbour(vertex_two, weight)
+        vertex_two.add_neighbour(vertex_one, weight)
 
     # TODO: Definir una función para remover aristas.
     def remove_edge(self):
@@ -225,7 +391,7 @@ class OrientedGraph(object):
 
         # Consulting of the edges:
         for vertex in vertices:
-            neighbours = vertex.get_neighbours()
+            neighbours = vertex.neighbors()
             for neighbour_id in neighbours:
                 # Weight:
                 weight = vertex.get_weighing(neighbour_id)
@@ -280,7 +446,7 @@ class OrientedGraph(object):
 
         # Consulting the isolated nodes:
         for vertex in self.vertices.values():
-            if not vertex.get_neighbours():
+            if not vertex.neighbors():
                 isolated.append(vertex.id)
         return isolated
 
@@ -288,17 +454,20 @@ class OrientedGraph(object):
 
     def adjacency_matrix(self) -> tuple:
         vertices = self.vertices.values()
-        matrix = list()
-        for row_vertex in vertices:
-            row = list()
-            for col_vertex in vertices:
-                if col_vertex.id in row_vertex.get_neighbours():
-                    row.append(1)
+        size = len(vertices)
+        matrix = np.zeros((size, size))
+
+        for i, row_vertex in enumerate(vertices):
+            for j, col_vertex in enumerate(vertices):
+                if col_vertex.id in row_vertex.neighbors():
+                    matrix[i, j] = 1
+                    matrix[j, i] = 1
                 else:
-                    row.append(0)
-            matrix.append(row)
+                    matrix[i, j] = 0
+                    matrix[j, i] = 0
+
         indices = self.vertices.keys()
-        return np.ndarray(matrix), list(indices)
+        return matrix, list(indices)
 
     def weight_matrix(self) -> tuple:
         vertices = self.vertices.values()
@@ -306,7 +475,7 @@ class OrientedGraph(object):
         for row_vertex in vertices:
             row = list()
             for col_vertex in vertices:
-                if col_vertex.id in row_vertex.get_neighbours():
+                if col_vertex.id in row_vertex.neighbors():
                     row.append(row_vertex.get_weighing(col_vertex.id))
                 else:
                     row.append(np.infty)
@@ -330,7 +499,7 @@ class NotOrientedGraph(OrientedGraph):
 
         # Consulting of the edges:
         for vertex in vertices:
-            neighbours = vertex.get_neighbours()
+            neighbours = vertex.neighbors()
             for neighbour_id in neighbours:
                 # Weight:
                 weight = vertex.get_weighing(neighbour_id)
@@ -338,3 +507,5 @@ class NotOrientedGraph(OrientedGraph):
                 edges.append((vertex.id, neighbour_id, weight))
 
         return edges, NotOrientedGraph
+
+
