@@ -1,13 +1,15 @@
 from __future__ import annotations
+
 import numpy as np
 
 
 class Vertex:
 
-    def __init__(self, label):
+    def __init__(self, label: str):
         self.__label = label
         self.__neighbors = dict()
         self.__edges = dict()
+        self.__loops = dict()
 
     @property
     def label(self) -> str:
@@ -20,11 +22,8 @@ class Vertex:
     def add_neighbor(self, vertex: Vertex, weight: float = None):
         if self is not vertex:
             self.__neighbors[vertex.label] = vertex
-            edge = Edge()
-            edge.lvertex = self
-            edge.rvertex = vertex
+            edge = Edge(label='{}-{}'.format(self.label, vertex.label), lvertex=self, rvertex=vertex)
             edge.weight = weight
-            edge.label = '{}-{}'.format(self.label, vertex.label)
             self.add_edge(edge)
         else:
             raise ValueError('It is the same vertex.')
@@ -41,22 +40,41 @@ class Vertex:
         return self.__edges
 
     def add_edge(self, edge: Edge):
-        if edge not in self.__edges.values() and edge.label not in self.__edges.keys():
+        if edge not in self.__edges.values() and edge.label not in self.__edges.keys() and not edge.loop:
             self.__edges[edge.label] = edge
+        elif edge.loop and edge.label not in self.__edges.keys() and edge not in self.__edges.values():
+            self.__loops[edge.label] = edge
+            self.__edges[edge.label] = edge
+        elif edge.loop and edge.label in self.__edges.keys() and edge in self.__edges.values():
+            pass
         else:
-            raise ValueError('This edge already exists.')
+            raise ValueError('This edge already exists')
 
     def edge(self, label: str) -> str:
         return self.edges.get(label)
 
+    @property
+    def loops(self) -> dict:
+        return self.__loops
+
+    def loop(self, label: str) -> str:
+        return self.loops.get(label)
+
 
 class Edge:
 
-    def __init__(self, label, lvertex: Vertex = None, rvertex: Vertex = None, weight: float = None):
+    def __init__(self, label: str, lvertex: Vertex, rvertex: Vertex, weight: float = None, orientation: str = None):
+        orientations = {'lr': {'start': lvertex, 'end': rvertex}, 'rl': {'start': rvertex, 'end': lvertex}}
         self.__label = label
         self.__lvertex = lvertex
         self.__rvertex = rvertex
         self.__weight = weight
+        self.__start = None if orientation not in ['lr', 'rl'] else orientations.get(orientation).get('start')
+        self.__end = None if orientation not in ['lr', 'rl'] else orientations.get(orientation).get('end')
+        self.__loop = True if lvertex == rvertex else False
+
+        lvertex.add_edge(self)
+        rvertex.add_edge(self)
 
     @property
     def label(self) -> str:
@@ -66,25 +84,9 @@ class Edge:
     def lvertex(self) -> Vertex:
         return self.__lvertex
 
-    @lvertex.setter
-    def lvertex(self, vertex: Vertex):
-        if self.__lvertex is None:
-            self.__lvertex = vertex
-            vertex.add_edge(self)
-        else:
-            raise ValueError('This edge already has left vertex.')
-
     @property
     def rvertex(self) -> Vertex:
         return self.__rvertex
-
-    @rvertex.setter
-    def rvertex(self, vertex: Vertex):
-        if self.__rvertex is None:
-            self.__rvertex = vertex
-            vertex.add_edge(self)
-        else:
-            raise ValueError('This edge already has right vertex.')
 
     @property
     def weight(self) -> float:
@@ -94,71 +96,46 @@ class Edge:
     def weight(self, weight: float):
         self.__weight = weight
 
-
-class OrientedEdge(Edge):
-    def __init__(self, label, start: Vertex = None, end: Vertex = None, weight: float = None):
-        super().__init__(label=label, lvertex=start, rvertex=end, weight=weight)
-        self.__start = super(OrientedEdge, self).lvertex
-        self.__end = super(OrientedEdge, self).rvertex
-
     @property
     def start(self) -> Vertex:
         return self.__start
-
-    @start.setter
-    def start(self, vertex: Vertex):
-        if self.__start is None:
-            super(OrientedEdge, type(self)).lvertex.fset(self, vertex)
-            self.__start = vertex
-        else:
-            raise ValueError('This edge already has start vertex.')
 
     @property
     def end(self) -> Vertex:
         return self.__end
 
-    @end.setter
-    def end(self, vertex: Vertex):
-        if self.__end is None:
-            super(OrientedEdge, type(self)).rvertex.fset(self, vertex)
-            self.__end = vertex
-        else:
-            raise ValueError('This edge already has end vertex.')
+    @property
+    def loop(self) -> bool:
+        return self.__loop
 
 
-class OrientedGraph:
+class Graph:
 
-    def __init__(self, name=None):
+    def __init__(self, name: str):
         self.__name = name
         self.__vertices = dict()
         self.__edges = dict()
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self.__name
 
-    @name.setter
-    def name(self, name):
-        self.__name = name
-
     @property
-    def vertices(self):
+    def vertices(self) -> dict:
         return self.__vertices
 
     @property
-    def edges(self):
+    def edges(self) -> dict:
         return self.__edges
 
     def add_edges(self, edges):
-        # TODO: Usar listas de tripletas (vertex_left, vertex_right, weight).
+        # TODO: Usar listas de tripletas (label, vertex_left, vertex_right, weight, orientation).
         vertex_left, vertex_right, weight = range(3)
 
         pass
 
     def add_vertex(self, neighbors=None):
         pass
-
-
 
 
 class OrientedGraph2(object):
@@ -398,7 +375,7 @@ class OrientedGraph2(object):
         return np.matrix(matrix), list(indices)
 
 
-class NotOrientedGraph(OrientedGraph):
+class NotOrientedGraph():
 
     def get_edges(self) -> tuple:
         """
@@ -421,5 +398,3 @@ class NotOrientedGraph(OrientedGraph):
                 edges.append((vertex.id, neighbour_id, weight))
 
         return edges, NotOrientedGraph
-
-
