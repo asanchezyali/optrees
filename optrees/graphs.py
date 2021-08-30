@@ -11,6 +11,9 @@ class Vertex:
         self.__edges = dict()
         self.__loops = dict()
 
+    def __del__(self):
+        print(f'Vertex {self.label} is deleted.')
+
     @property
     def label(self) -> str:
         return self.__label
@@ -28,9 +31,15 @@ class Vertex:
         else:
             raise ValueError('It is the same vertex.')
 
-    # TODO: Implement the delete method to neighbors.
-    def del_neighbor(self):
-        pass
+    def delete_neighbor(self, vertex_label: str):
+        try: 
+            del self.__neighbors[vertex_label]
+            for edge in self.__edges.values():
+                if edge.is_vertex(vertex_label):
+                    del self.__edges[edge.label]
+                    del self.__loops[edge.label]
+        except KeyError:
+            raise KeyError(f'Vertex {vertex_label} does not exist.')
 
     def neighbor(self, label: str) -> Vertex:
         return self.neighbors.get(label)
@@ -40,15 +49,13 @@ class Vertex:
         return self.__edges
 
     def add_edge(self, edge: Edge):
-        if edge not in self.__edges.values() and edge.label not in self.__edges.keys() and not edge.loop:
+        if not edge.loop and edge.label not in self.__edges.keys() and edge not in self.__edges.values():
             self.__edges[edge.label] = edge
         elif edge.loop and edge.label not in self.__edges.keys() and edge not in self.__edges.values():
             self.__loops[edge.label] = edge
             self.__edges[edge.label] = edge
-        elif edge.loop and edge.label in self.__edges.keys() and edge in self.__edges.values():
-            pass
         else:
-            raise ValueError('This edge already exists')
+            raise ValueError('This edge or loop already exists')
 
     def edge(self, label: str) -> str:
         return self.edges.get(label)
@@ -75,6 +82,9 @@ class Edge:
 
         lvertex.add_edge(self)
         rvertex.add_edge(self)
+
+    def __del__(self):
+        print(f'Edge {self.label} is deleted.')
 
     @property
     def label(self) -> str:
@@ -108,6 +118,9 @@ class Edge:
     def loop(self) -> bool:
         return self.__loop
 
+    def is_vertex(self, vertex_label: str) -> bool:
+        return self.lvertex.label == vertex_label or self.rvertex.label == vertex_label
+
 
 class Graph:
 
@@ -129,6 +142,11 @@ class Graph:
         return self.__edges
 
     def add_edges(self, edges):
+
+        for edge in edges:
+            if edge.label not in self.__edges.keys():
+                self.__edges[edge.label] = edge
+                self.__vertices[edge.lvertex.label].add_edge(edge)
         # TODO: Usar listas de tripletas (label, vertex_left, vertex_right, weight, orientation).
         vertex_left, vertex_right, weight = range(3)
 
