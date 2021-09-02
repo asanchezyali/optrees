@@ -5,24 +5,36 @@ import numpy as np
 
 class Vertex:
 
-    def __init__(self, label: str):
+    def __init__(self, label: str):        
         self.__label = label
         self.__neighbors = dict()
         self.__edges = dict()
         self.__loops = dict()
 
     def __del__(self):
+        """
+        Delete the vertex.
+        """
         print(f'Vertex {self.label} is deleted.')
 
     @property
     def label(self) -> str:
+        """
+        Returns the label of the vertex.
+        """
         return self.__label
 
     @property
     def neighbors(self) -> dict:
+        """
+        Return the neighbors of the vertex.
+        """
         return self.__neighbors
 
     def add_neighbor(self, vertex: Vertex, weight: float = None):
+        """
+        Add a neighbor to the vertex.
+        """
         if self is not vertex:
             self.__neighbors[vertex.label] = vertex
             edge = Edge(label='{}-{}'.format(self.label, vertex.label), lvertex=self, rvertex=vertex)
@@ -32,6 +44,9 @@ class Vertex:
             raise ValueError('It is the same vertex.')
 
     def delete_neighbor(self, vertex_label: str):
+        """
+        Delete a neighbor from the vertex.
+        """
         try: 
             del self.__neighbors[vertex_label]
             for edge in self.__edges.values():
@@ -42,13 +57,22 @@ class Vertex:
             raise KeyError(f'Vertex {vertex_label} does not exist.')
 
     def neighbor(self, label: str) -> Vertex:
+        """
+        Return the neighbor vertex of the vertex.
+        """
         return self.neighbors.get(label)
 
     @property
     def edges(self) -> dict:
+        """
+        Return the edges of the vertex.
+        """
         return self.__edges
 
     def add_edge(self, edge: Edge):
+        """
+        Add an edge to the vertex.
+        """
         if not edge.loop and edge.label not in self.__edges.keys() and edge not in self.__edges.values():
             self.__edges[edge.label] = edge
         elif edge.loop and edge.label not in self.__edges.keys() and edge not in self.__edges.values():
@@ -58,13 +82,22 @@ class Vertex:
             raise ValueError('This edge or loop already exists')
 
     def edge(self, label: str) -> str:
+        """
+        Return the edge of the vertex.
+        """
         return self.edges.get(label)
 
     @property
     def loops(self) -> dict:
+        """
+        Return the loops of the vertex.
+        """
         return self.__loops
 
     def loop(self, label: str) -> str:
+        """
+        Return the loop of the vertex.
+        """
         return self.loops.get(label)
 
 
@@ -84,41 +117,71 @@ class Edge:
         rvertex.add_edge(self)
 
     def __del__(self):
+        """
+        Delete the edge.
+        """
         print(f'Edge {self.label} is deleted.')
 
     @property
     def label(self) -> str:
+        """
+        Return the label of the edge.
+        """
         return self.__label
 
     @property
     def lvertex(self) -> Vertex:
+        """
+        Return the left vertex of the edge.
+        """
         return self.__lvertex
 
     @property
     def rvertex(self) -> Vertex:
+        """
+        Return the right vertex of the edge.
+        """
         return self.__rvertex
 
     @property
     def weight(self) -> float:
+        """
+        Return the weight of the edge.
+        """
         return self.__weight
 
     @weight.setter
     def weight(self, weight: float):
+        """
+        Set the weight of the edge.
+        """
         self.__weight = weight
 
     @property
     def start(self) -> Vertex:
+        """
+        Return the start vertex of the edge.
+        """
         return self.__start
 
     @property
     def end(self) -> Vertex:
+        """
+        Return the end vertex of the edge.
+        """
         return self.__end
 
     @property
     def loop(self) -> bool:
+        """
+        Return True if the edge is a loop.
+        """
         return self.__loop
 
     def is_vertex(self, vertex_label: str) -> bool:
+        """
+        Return True if the vertex is the start or end vertex of the edge.
+        """
         return self.lvertex.label == vertex_label or self.rvertex.label == vertex_label
 
 
@@ -131,29 +194,71 @@ class Graph:
 
     @property
     def name(self) -> str:
+        """
+        Return the name of the graph.
+        """
         return self.__name
 
     @property
     def vertices(self) -> dict:
+        """
+        Return the vertices of the graph.
+        """
         return self.__vertices
 
     @property
     def edges(self) -> dict:
+        """
+        Return the edges of the graph.
+        """
         return self.__edges
 
-    def add_edges(self, edges):
+    def add_edge(self, edge: Edge):
+        """
+        Add an edge to the graph.
+        """
+        if edge.label not in self.__edges.keys():
+            self.__edges[edge.label] = edge
+            self.__vertices[edge.lvertex.label] = edge.lvertex
+            self.__vertices[edge.rvertex.label] = edge.rvertex
+        else:
+            raise ValueError('This edge already exists')    
 
+    def add_vertex(self, vertex: Vertex):
+        """
+        Add a vertex to the graph.
+        """
+        self.__vertices[vertex.label] = vertex
+
+    def add_edges(self, edges: list[Edge]):
+        """
+        Add a list of edges to the graph.
+        """
         for edge in edges:
-            if edge.label not in self.__edges.keys():
-                self.__edges[edge.label] = edge
-                self.__vertices[edge.lvertex.label].add_edge(edge)
-        # TODO: Usar listas de tripletas (label, vertex_left, vertex_right, weight, orientation).
-        vertex_left, vertex_right, weight = range(3)
+            self.add_edge(edge)        
 
-        pass
+    def build(self, edges: list[(str, str, str, float, str)]):
+        """
+        Builds a graph from a list of edges.
+        """
+        label, lvertex, rvertex, weight, orientation = 0, 1, 2, 3, 4
+        for edge in edges:
+            if edge[label] not in self.__edges.keys():
+                left_vertex = Vertex(edge[lvertex])
+                right_vertex = Vertex(edge[rvertex])
+                edge = Edge(
+                    label=edge[label], 
+                    lvertex=left_vertex, 
+                    rvertex=right_vertex, 
+                    weight=edge[weight] if len(edge) > 3 else None, 
+                    orientation=edge[orientation] if len(edge) > 4 else None
+                    )
+                self.add_edge(edge)
+                self.add_vertex(left_vertex)
+                self.add_vertex(right_vertex)
+            else:
+                raise ValueError('This edge already exists')
 
-    def add_vertex(self, neighbors=None):
-        pass
 
 
 class OrientedGraph2(object):
