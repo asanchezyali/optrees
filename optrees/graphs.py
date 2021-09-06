@@ -62,6 +62,21 @@ class Vertex:
         """
         return self.neighbors.get(label)
 
+    def remove_edge(self, edge: Edge):
+        """
+        Remove an edge from the vertex.
+        """
+        if edge.label in self.__edges.keys():
+            del self.__edges[edge.label]
+        else:
+            raise ValueError('This edge does not exist.')
+
+    def get_weight(self, vertex: Vertex) -> float:
+        """
+        Return the weight of the edge.
+        """
+        return self.__edges.get(vertex.label).weight
+
     @property
     def edges(self) -> dict:
         """
@@ -78,6 +93,8 @@ class Vertex:
         elif edge.loop and edge.label not in self.__edges.keys() and edge not in self.__edges.values():
             self.__loops[edge.label] = edge
             self.__edges[edge.label] = edge
+        elif edge.loop and edge.label in self.__edges.keys() and edge in self.__edges.values():
+            pass
         else:
             raise ValueError('This edge or loop already exists')
 
@@ -99,6 +116,14 @@ class Vertex:
         Return the loop of the vertex.
         """
         return self.loops.get(label)
+    
+    def is_isolated(self) -> bool:
+        """
+        Return True if the vertex is isolated.
+        """
+        return len(self.neighbors) == 0
+
+    
 
 
 class Edge:
@@ -241,7 +266,7 @@ class Graph:
         """
         Builds a graph from a list of edges.
         """
-        label, lvertex, rvertex, weight, orientation = 0, 1, 2, 3, 4
+        label, lvertex, rvertex, weight, orientation = range(5) # ids of the elements in the list
         for edge in edges:
             if edge[label] not in self.__edges.keys():
                 left_vertex = Vertex(edge[lvertex])
@@ -258,216 +283,71 @@ class Graph:
                 self.add_vertex(right_vertex)
             else:
                 raise ValueError('This edge already exists')
-
-
-
-class OrientedGraph2(object):
-    """ This class defines the general structure for a graph. Initializes a
-    graph object. If no dictionary or None is given, an empty dictionary will be
-    used.
-
-        Args:
-            ``graph``: Dictionary with the relations among nodes. The keys
-            of the dictionary are the node of the graph.  The corresponding
-            values are list with nodes, which are connecting by an edge.
-
-        Examples:
-            For define a graph you should write a *dict* like this:
-
-            .. code-block:: python
-
-                graph = {
-                    'a': [('c', 0)],
-                    'b': [('c', 1), ('e', 3)],
-                    'c': [('a', 3), ('b', 3), ('d', 2), ('e', 1)],
-                    'f': None
-                }
-
-            contains the label from vertex neighbour and  weight for edge.
-            When the value is None, then the node is isolated."""
-
-    def __init__(self, graph: dict = None):
-        # The class has the following information:
-        self.vertices = dict()
-        self.num_vertices = 0
-
-        if graph is not None:
-            self.add_structure(graph)
-
-    def __contains__(self, vertex_id: str) -> bool:
-        """ This method allow you to consult if a vertex belong to the graph.
-
-        Args:
-            ``vertex_id``: It is a vertex id.
-
-        Returns:
-            *bool*: It is a boolean.
-
+    
+    def is_vertex(self, vertex_label: str) -> bool:
         """
-        return vertex_id in self.vertices.keys()
-
-    def __iter__(self) -> iter:
-        """ This method allows you to iterate over the nodes of the graph.
-
-        Returns:
-            *iter*: It is a list iterable of nodes.
-
+        Return True if the vertex is in the graph.
         """
-        return iter(self.vertices.values())
+        return vertex_label in self.__vertices.keys()
 
-    # Adding new vertices to the graph:
-    def add_vertex(self, vertex_id: str) -> Vertex:
-        """ This method allows adding new vertices to the graph.
-
-        Args:
-            ``vertex_id`` (str): It is a string that is a vertex id.
-
-        Returns:
-            *Vertex*: It is a vertex object.
+    def is_edge(self, edge_label: str) -> bool:
         """
-        # Push a new vertex:
-        self.num_vertices += 1
-        new_vertex = Vertex(vertex_id)
-        self.vertices[vertex_id] = new_vertex
-        return new_vertex
-
-    # TODO: Definir una función para remover vertices:
-    def remove_vertex(self):
-        pass
-
-    # Consult a vertex by its id:
-    def get_vertex(self, vertex_id: str) -> Vertex:
-        """ This method allows you to obtain a vertex for id.
-
-        Args:
-            ``vertex_id`` (str): It is a string that is a vertex id.
-
-        Returns:
-            *Vertex*: It is a vertex object.
+        Return True if the edge is in the graph.
         """
-        # Get the vertex:
-        if vertex_id in self.vertices:
-            return self.vertices.get(vertex_id)
-
-    def get_vertices(self) -> list:
-        """ This method allow you to consult all vertices in the graph.
-
-        Returns:
-            *list*: It is a list with all id vertices of the graph.
+        return edge_label in self.__edges.keys()
+    
+    def get_vertex(self, vertex_label: str) -> Vertex:
         """
-        return list(self.vertices.keys())
-
-    def add_edge(self, edge: tuple, weight: float = 0):
-        """ This method allow you to add new edges to the graph.
-
-        Args:
-            ``edge`` (tuple): It is a tuple with the following structure:
-
-            .. code-block:: python
-
-                            edge = ('a', 'b')
-
-            where entrances are vertex ids.
-            ``weighing`` (float): It is a float with the weight between
-            nodes of the edge.
-
+        Return the vertex of the graph.
         """
-        # Rename the index for the list of vertices:
-        (start_vertex, end_vertex) = range(2)
+        return self.__vertices.get(vertex_label)
+    
+    def get_edge(self, edge_label: str) -> Edge:
+        """
+        Return the edge of the graph.
+        """
+        return self.__edges.get(edge_label)
 
-        # Consulting if there exist the vertex in the graph:
-        if edge[start_vertex] in self.vertices:
-            vertex_one = self.get_vertex(edge[start_vertex])
+    def remove_vertex(self, vertex_label: str):
+        """
+        Remove the vertex from the graph.
+        """
+        if self.is_vertex(vertex_label):
+            del self.__vertices[vertex_label]
+            for edge in self.__edges.values():
+                if edge.is_vertex(vertex_label):
+                    del self.__edges[edge.label]
+                    edge.lvertex.remove_edge(edge)
+                    edge.rvertex.remove_edge(edge)
+                    break
         else:
-            vertex_one = self.add_vertex(edge[start_vertex])
+            raise ValueError('This vertex does not exist')
 
-        # Consulting if there exist the vertex in the graph:
-        if edge[end_vertex] in self.vertices:
-            vertex_two = self.get_vertex(edge[end_vertex])
+    def remove_edge(self, edge_label: str):
+        """
+        Remove the edge from the graph.
+        """
+        if self.is_edge(edge_label):
+            del self.__edges[edge_label]
+            for edge in self.__edges.values():
+                if edge.label == edge_label:
+                    edge.lvertex.remove_edge(edge)
+                    edge.rvertex.remove_edge(edge)
+                    break
         else:
-            vertex_two = self.add_vertex(edge[end_vertex])
+            raise ValueError('This edge does not exist')
 
-        vertex_one.add_neighbour(vertex_two, weight)
-        vertex_two.add_neighbour(vertex_one, weight)
-
-    # TODO: Definir una función para remover aristas.
-    def remove_edge(self):
-        pass
-
-    def get_edges(self) -> tuple:
-        """ This method is to find the edges of a graph.
-
-        Returns:
-            *edges*: list of tuples. The tuples are edges of the graph.
+    def get_isolate_vertices(self) -> list[Vertex]:
         """
-        edges = list()
-        vertices = self.vertices.values()
-
-        # Consulting of the edges:
-        for vertex in vertices:
-            neighbours = vertex.neighbors()
-            for neighbour_id in neighbours:
-                # Weight:
-                weight = vertex.get_weighing(neighbour_id)
-                # Edges:
-                edges.append((vertex.id, neighbour_id, weight))
-        return edges, self
-
-    def add_structure(self, graph: dict) -> None:
-        """ Initializes a graph object. If no dictionary or None is given,
-        an empty dictionary will be used.
-
-        Args:
-            ``graph``: Dictionary with the relations among nodes.  The keys
-            of the dictionary are the node of the graph. The corresponding
-            values are list with nodes, which are connecting by an edge.
-
-        Examples:
-            For define a graph you should write a dict like this:
-
-            .. code-block:: python
-
-                graph = {
-                    'a': [('c', 0)],
-                    'b': [('c', 1), ('e', 3)],
-                    'c': [('a', 3), ('b', 3), ('d', 2), ('e', 1)],
-                    'f': None
-                }
-
-            where the tuples contains the label from vertex end and weight
-            for edge.
+        Return the list of vertices that are isolated.
         """
-        (vertex_id, weight) = range(2)
-
-        # Push a structure to graph:
-        for start_vertex in graph:
-            if graph[start_vertex] is not None:
-                for end_vertex in graph[start_vertex]:
-                    edge = (start_vertex, end_vertex[vertex_id])
-                    weighing = end_vertex[weight]
-                    self.add_edge(edge, weighing)
-            else:
-                self.add_vertex(start_vertex)
-
-    # TODO: Mejorar esta función para detectar los nodos que no tienen ni entradas ni salidas.
-    def isolated_vertex(self) -> list:
-        """ This method is allows you to find the isolated nodes in a graph.
-
-        Returns:
-            *list*: Returns a list with isolated nodes in a graph.
-        """
-        isolated = list()
-
-        # Consulting the isolated nodes:
-        for vertex in self.vertices.values():
-            if not vertex.neighbors():
-                isolated.append(vertex.id)
-        return isolated
-
-    # TODO: Encontrar nodos colgantes.
+        return [vertex for vertex in self.__vertices.values() if vertex.is_isolated()]
 
     def adjacency_matrix(self) -> tuple:
-        vertices = self.vertices.values()
+        """
+        Return the adjacency matrix of the graph.
+        """        
+        vertices = self.__vertices.values()
         size = len(vertices)
         matrix = np.zeros((size, size))
 
@@ -484,40 +364,186 @@ class OrientedGraph2(object):
         return matrix, list(indices)
 
     def weight_matrix(self) -> tuple:
+        """
+        Return the weight matrix of the graph.
+        """
         vertices = self.vertices.values()
         matrix = list()
         for row_vertex in vertices:
             row = list()
             for col_vertex in vertices:
-                if col_vertex.id in row_vertex.neighbors():
-                    row.append(row_vertex.get_weighing(col_vertex.id))
+                if col_vertex.label in row_vertex.neighbors():
+                    row.append(row_vertex.get_weight(col_vertex.label))
                 else:
-                    row.append(np.infty)
+                    row.append(np.inf)
             matrix.append(row)
         indices = self.vertices.keys()
         return np.matrix(matrix), list(indices)
 
 
-class NotOrientedGraph():
+class GraphReader:
+    """
+    A class for reading a graph from a file.
+    """
+    def __init__(self):
+        self.__graph = Graph()
 
-    def get_edges(self) -> tuple:
+    def read(self, file_path: str):
         """
-        This method is to find the edges of a graph.
-
-        Returns:
-            edges: list of tuples. The tuples are edges of the graph.
+        Reads a graph from a file.
         """
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
+            edges = list()
+            for line in lines:
+                edge = line.split()
+                edges.append((edge[0], edge[1], edge[2], float(edge[3]), edge[4]))
+            self.__graph.build(edges)
 
-        edges = list()
-        vertices = self.vertices.values()
+    def get_graph(self) -> Graph:
+        """
+        Return the graph.
+        """
+        return self.__graph
 
-        # Consulting of the edges:
-        for vertex in vertices:
-            neighbours = vertex.neighbors()
-            for neighbour_id in neighbours:
-                # Weight:
-                weight = vertex.get_weighing(neighbour_id)
-                # Edges:
-                edges.append((vertex.id, neighbour_id, weight))
 
-        return edges, NotOrientedGraph
+class GraphWriter:
+    """
+    A class for writing a graph to a file.
+    """
+    def __init__(self, graph: Graph):
+        self.__graph = graph
+
+    def write(self, file_path: str):
+        """
+        Writes a graph to a file.
+        """
+        with open(file_path, 'w') as file:
+            for edge in self.__graph.edges:
+                file.write(edge.label + ' ' + edge.lvertex.label + ' ' + edge.rvertex.label + ' ' + str(edge.weight) + ' ' + edge.orientation + '\n')
+
+    def get_graph(self) -> Graph:
+        """
+        Return the graph.
+        """
+        return self.__graph
+
+
+class GraphUtils:
+    """
+    A class for performing graph operations.
+    """
+    @staticmethod
+    def read_graph(file_path: str) -> Graph:
+        """
+        Reads a graph from a file.
+        """
+        reader = GraphReader()
+        reader.read(file_path)
+        return reader.get_graph()
+
+    @staticmethod
+    def write_graph(graph: Graph, file_path: str):
+        """
+        Writes a graph to a file.
+        """
+        writer = GraphWriter()
+        writer.write(file_path)
+        return writer.get_graph()
+
+    @staticmethod
+    def get_isolate_vertices(graph: Graph) -> list[Vertex]:
+        """
+        Return the list of vertices that are isolated.
+        """
+        return graph.get_isolate_vertices()
+
+    @staticmethod
+    def get_weight_matrix(graph: Graph) -> tuple:
+        """
+        Return the weight matrix of the graph.
+        """
+        return graph.weight_matrix()
+
+    @staticmethod
+    def get_adjacency_matrix(graph: Graph) -> tuple:
+        """
+        Return the adjacency matrix of the graph.
+        """
+        return graph.adjacency_matrix()
+
+
+class GraphAlgorithms:
+    """
+    A class for performing graph algorithms.
+    """
+    @staticmethod
+    def dijkstra(graph: Graph, start_vertex: Vertex) -> list:
+        """
+        Return the list of vertices that are reachable from the start vertex.
+        """
+        distances = {vertex.label: np.inf for vertex in graph.vertices.values()}
+        distances[start_vertex.label] = 0
+        vertices = graph.vertices.values()
+        while vertices:
+            min_distance = np.inf
+            vertex = None
+            for vertex in vertices:
+                if distances[vertex.label] < min_distance:
+                    min_distance = distances[vertex.label]
+                    nearest_vertex = vertex
+            vertices.remove(nearest_vertex)
+            for neighbor in nearest_vertex.neighbors():
+                distance = nearest_vertex.get_weight(neighbor) + distances[nearest_vertex.label]
+                if distance < distances[neighbor]:
+                    distances[neighbor] = distance
+        return distances
+
+    @staticmethod
+    def floyd_warshall(graph: Graph) -> list:
+        """
+        Return the list of vertices that are reachable from any vertex.
+        """
+        distances = {vertex.label: np.inf for vertex in graph.vertices.values()}
+        for vertex in graph.vertices.values():
+            for neighbor in vertex.neighbors():
+                distances[neighbor] = vertex.get_weight(neighbor)
+        for k in graph.vertices.keys():
+            for i in graph.vertices.keys():
+                for j in graph.vertices.keys():
+                    if distances[i] + distances[j] < distances[i]:
+                        distances[i] = distances[i] + distances[j]
+        return distances
+
+
+class GraphTest:
+    """
+    A class for testing the graph algorithms.
+    """
+    def __init__(self, graph: Graph):
+        self.__graph = graph
+
+    def test(self):
+        """
+        Tests the graph algorithms.
+        """
+        print('Isolate vertices:')
+        print(GraphUtils.get_isolate_vertices(self.__graph))
+
+        print('\nWeight matrix:')
+        print(GraphUtils.get_weight_matrix(self.__graph))
+
+        print('\nAdjacency matrix:')
+        print(GraphUtils.get_adjacency_matrix(self.__graph))
+
+        print('\nDijkstra:')
+        print(GraphAlgorithms.dijkstra(self.__graph, self.__graph.vertices[0]))
+
+        print('\nFloyd-Warshall:')
+        print(GraphAlgorithms.floyd_warshall(self.__graph))
+
+    
+if __name__ == '__main__':
+    graph = GraphUtils.read_graph('graph.txt')
+    GraphTest(graph).test()
+    
