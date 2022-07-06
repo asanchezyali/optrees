@@ -369,7 +369,7 @@ class Graph:
         else:
             raise ValueError("This edge does not exist")
 
-    def get_isolate_vertices(self) -> list[Vertex]:
+    def get_isolate_vertices(self) -> List[Vertex]:
         """
         Return the list of vertices that are isolated.
         """
