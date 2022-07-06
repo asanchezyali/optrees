@@ -1,11 +1,11 @@
-from __future__ import annotations
+from typing import List, Tuple
 
 import numpy as np
+from pyparsing import Optional
 
 
 class Vertex:
-
-    def __init__(self, label: str):        
+    def __init__(self, label: str):
         self.__label = label
         self.__neighbors = dict()
         self.__edges = dict()
@@ -15,7 +15,7 @@ class Vertex:
         """
         Delete the vertex.
         """
-        print(f'Vertex {self.label} is deleted.')
+        print(f"Vertex {self.label} is deleted.")
 
     @property
     def label(self) -> str:
@@ -31,47 +31,51 @@ class Vertex:
         """
         return self.__neighbors
 
-    def add_neighbor(self, vertex: Vertex, weight: float = None):
+    def add_neighbor(self, vertex: "Vertex", weight: float = None):
         """
         Add a neighbor to the vertex.
         """
         if self is not vertex:
             self.__neighbors[vertex.label] = vertex
-            edge = Edge(label='{}-{}'.format(self.label, vertex.label), lvertex=self, rvertex=vertex)
+            edge = Edge(
+                label=f"{self.label}-{vertex.label}",
+                lvertex=self,
+                rvertex=vertex,
+            )
             edge.weight = weight
             self.add_edge(edge)
         else:
-            raise ValueError('It is the same vertex.')
+            raise ValueError("It is the same vertex.")
 
     def delete_neighbor(self, vertex_label: str):
         """
         Delete a neighbor from the vertex.
         """
-        try: 
+        try:
             del self.__neighbors[vertex_label]
             for edge in self.__edges.values():
                 if edge.is_vertex(vertex_label):
                     del self.__edges[edge.label]
                     del self.__loops[edge.label]
         except KeyError:
-            raise KeyError(f'Vertex {vertex_label} does not exist.')
+            raise KeyError(f"Vertex {vertex_label} does not exist.")
 
-    def neighbor(self, label: str) -> Vertex:
+    def neighbor(self, label: str) -> "Vertex":
         """
         Return the neighbor vertex of the vertex.
         """
         return self.neighbors.get(label)
 
-    def remove_edge(self, edge: Edge):
+    def remove_edge(self, edge: "Edge"):
         """
         Remove an edge from the vertex.
         """
         if edge.label in self.__edges.keys():
             del self.__edges[edge.label]
         else:
-            raise ValueError('This edge does not exist.')
+            raise ValueError("This edge does not exist.")
 
-    def get_weight(self, vertex: Vertex) -> float:
+    def get_weight(self, vertex: "Vertex") -> float:
         """
         Return the weight of the edge.
         """
@@ -84,19 +88,31 @@ class Vertex:
         """
         return self.__edges
 
-    def add_edge(self, edge: Edge):
+    def add_edge(self, edge: "Edge"):
         """
         Add an edge to the vertex.
         """
-        if not edge.loop and edge.label not in self.__edges.keys() and edge not in self.__edges.values():
+        if (
+            not edge.loop
+            and edge.label not in self.__edges.keys()
+            and edge not in self.__edges.values()
+        ):
             self.__edges[edge.label] = edge
-        elif edge.loop and edge.label not in self.__edges.keys() and edge not in self.__edges.values():
+        elif (
+            edge.loop
+            and edge.label not in self.__edges.keys()
+            and edge not in self.__edges.values()
+        ):
             self.__loops[edge.label] = edge
             self.__edges[edge.label] = edge
-        elif edge.loop and edge.label in self.__edges.keys() and edge in self.__edges.values():
+        elif (
+            edge.loop
+            and edge.label in self.__edges.keys()
+            and edge in self.__edges.values()
+        ):
             pass
         else:
-            raise ValueError('This edge or loop already exists')
+            raise ValueError("This edge or loop already exists")
 
     def edge(self, label: str) -> str:
         """
@@ -116,26 +132,41 @@ class Vertex:
         Return the loop of the vertex.
         """
         return self.loops.get(label)
-    
+
     def is_isolated(self) -> bool:
         """
         Return True if the vertex is isolated.
         """
         return len(self.neighbors) == 0
 
-    
-
 
 class Edge:
-
-    def __init__(self, label: str, lvertex: Vertex, rvertex: Vertex, weight: float = None, orientation: str = None):
-        orientations = {'lr': {'start': lvertex, 'end': rvertex}, 'rl': {'start': rvertex, 'end': lvertex}}
+    def __init__(
+        self,
+        label: str,
+        lvertex: Vertex,
+        rvertex: Vertex,
+        weight: float = None,
+        orientation: str = None,
+    ):
+        orientations = {
+            "lr": {"start": lvertex, "end": rvertex},
+            "rl": {"start": rvertex, "end": lvertex},
+        }
         self.__label = label
         self.__lvertex = lvertex
         self.__rvertex = rvertex
         self.__weight = weight
-        self.__start = None if orientation not in ['lr', 'rl'] else orientations.get(orientation).get('start')
-        self.__end = None if orientation not in ['lr', 'rl'] else orientations.get(orientation).get('end')
+        self.__start = (
+            None
+            if orientation not in ["lr", "rl"]
+            else orientations.get(orientation).get("start")
+        )
+        self.__end = (
+            None
+            if orientation not in ["lr", "rl"]
+            else orientations.get(orientation).get("end")
+        )
         self.__loop = True if lvertex == rvertex else False
 
         lvertex.add_edge(self)
@@ -145,7 +176,7 @@ class Edge:
         """
         Delete the edge.
         """
-        print(f'Edge {self.label} is deleted.')
+        print(f"Edge {self.label} is deleted.")
 
     @property
     def label(self) -> str:
@@ -211,7 +242,6 @@ class Edge:
 
 
 class Graph:
-
     def __init__(self, name: str):
         self.__name = name
         self.__vertices = dict()
@@ -247,7 +277,7 @@ class Graph:
             self.__vertices[edge.lvertex.label] = edge.lvertex
             self.__vertices[edge.rvertex.label] = edge.rvertex
         else:
-            raise ValueError('This edge already exists')    
+            raise ValueError("This edge already exists")
 
     def add_vertex(self, vertex: Vertex):
         """
@@ -255,35 +285,37 @@ class Graph:
         """
         self.__vertices[vertex.label] = vertex
 
-    def add_edges(self, edges: list[Edge]):
+    def add_edges(self, edges: List[Edge]):
         """
         Add a list of edges to the graph.
         """
         for edge in edges:
-            self.add_edge(edge)        
+            self.add_edge(edge)
 
-    def build(self, edges: list[(str, str, str, float, str)]):
+    def build(self, edges: List[Tuple[str, str, str, float, str]]):
         """
         Builds a graph from a list of edges.
         """
-        label, lvertex, rvertex, weight, orientation = range(5) # ids of the elements in the list
+        label, lvertex, rvertex, weight, orientation = range(
+            5
+        )  # ids of the elements in the list
         for edge in edges:
             if edge[label] not in self.__edges.keys():
                 left_vertex = Vertex(edge[lvertex])
                 right_vertex = Vertex(edge[rvertex])
                 edge = Edge(
-                    label=edge[label], 
-                    lvertex=left_vertex, 
-                    rvertex=right_vertex, 
-                    weight=edge[weight] if len(edge) > 3 else None, 
-                    orientation=edge[orientation] if len(edge) > 4 else None
-                    )
+                    label=edge[label],
+                    lvertex=left_vertex,
+                    rvertex=right_vertex,
+                    weight=edge[weight] if len(edge) > 3 else None,
+                    orientation=edge[orientation] if len(edge) > 4 else None,
+                )
                 self.add_edge(edge)
                 self.add_vertex(left_vertex)
                 self.add_vertex(right_vertex)
             else:
-                raise ValueError('This edge already exists')
-    
+                raise ValueError("This edge already exists")
+
     def is_vertex(self, vertex_label: str) -> bool:
         """
         Return True if the vertex is in the graph.
@@ -295,13 +327,13 @@ class Graph:
         Return True if the edge is in the graph.
         """
         return edge_label in self.__edges.keys()
-    
-    def get_vertex(self, vertex_label: str) -> Vertex:
+
+    def get_vertex(self, vertex_label: str) -> Optional[Vertex]:
         """
         Return the vertex of the graph.
         """
         return self.__vertices.get(vertex_label)
-    
+
     def get_edge(self, edge_label: str) -> Edge:
         """
         Return the edge of the graph.
@@ -321,7 +353,7 @@ class Graph:
                     edge.rvertex.remove_edge(edge)
                     break
         else:
-            raise ValueError('This vertex does not exist')
+            raise ValueError("This vertex does not exist")
 
     def remove_edge(self, edge_label: str):
         """
@@ -335,7 +367,7 @@ class Graph:
                     edge.rvertex.remove_edge(edge)
                     break
         else:
-            raise ValueError('This edge does not exist')
+            raise ValueError("This edge does not exist")
 
     def get_isolate_vertices(self) -> list[Vertex]:
         """
@@ -346,7 +378,7 @@ class Graph:
     def adjacency_matrix(self) -> tuple:
         """
         Return the adjacency matrix of the graph.
-        """        
+        """
         vertices = self.__vertices.values()
         size = len(vertices)
         matrix = np.zeros((size, size))
@@ -385,6 +417,7 @@ class GraphReader:
     """
     A class for reading a graph from a file.
     """
+
     def __init__(self):
         self.__graph = Graph()
 
@@ -392,7 +425,7 @@ class GraphReader:
         """
         Reads a graph from a file.
         """
-        with open(file_path, 'r') as file:
+        with open(file_path) as file:
             lines = file.readlines()
             edges = list()
             for line in lines:
@@ -411,6 +444,7 @@ class GraphWriter:
     """
     A class for writing a graph to a file.
     """
+
     def __init__(self, graph: Graph):
         self.__graph = graph
 
@@ -418,9 +452,20 @@ class GraphWriter:
         """
         Writes a graph to a file.
         """
-        with open(file_path, 'w') as file:
+        with open(file_path, "w") as file:
             for edge in self.__graph.edges:
-                file.write(edge.label + ' ' + edge.lvertex.label + ' ' + edge.rvertex.label + ' ' + str(edge.weight) + ' ' + edge.orientation + '\n')
+                file.write(
+                    edge.label
+                    + " "
+                    + edge.lvertex.label
+                    + " "
+                    + edge.rvertex.label
+                    + " "
+                    + str(edge.weight)
+                    + " "
+                    + edge.orientation
+                    + "\n"
+                )
 
     def get_graph(self) -> Graph:
         """
@@ -433,6 +478,7 @@ class GraphUtils:
     """
     A class for performing graph operations.
     """
+
     @staticmethod
     def read_graph(file_path: str) -> Graph:
         """
@@ -452,7 +498,7 @@ class GraphUtils:
         return writer.get_graph()
 
     @staticmethod
-    def get_isolate_vertices(graph: Graph) -> list[Vertex]:
+    def get_isolate_vertices(graph: Graph) -> List[Vertex]:
         """
         Return the list of vertices that are isolated.
         """
@@ -477,6 +523,7 @@ class GraphAlgorithms:
     """
     A class for performing graph algorithms.
     """
+
     @staticmethod
     def dijkstra(graph: Graph, start_vertex: Vertex) -> list:
         """
@@ -494,7 +541,10 @@ class GraphAlgorithms:
                     nearest_vertex = vertex
             vertices.remove(nearest_vertex)
             for neighbor in nearest_vertex.neighbors():
-                distance = nearest_vertex.get_weight(neighbor) + distances[nearest_vertex.label]
+                distance = (
+                    nearest_vertex.get_weight(neighbor)
+                    + distances[nearest_vertex.label]
+                )
                 if distance < distances[neighbor]:
                     distances[neighbor] = distance
         return distances
@@ -520,6 +570,7 @@ class GraphTest:
     """
     A class for testing the graph algorithms.
     """
+
     def __init__(self, graph: Graph):
         self.__graph = graph
 
@@ -527,23 +578,22 @@ class GraphTest:
         """
         Tests the graph algorithms.
         """
-        print('Isolate vertices:')
+        print("Isolate vertices:")
         print(GraphUtils.get_isolate_vertices(self.__graph))
 
-        print('\nWeight matrix:')
+        print("\nWeight matrix:")
         print(GraphUtils.get_weight_matrix(self.__graph))
 
-        print('\nAdjacency matrix:')
+        print("\nAdjacency matrix:")
         print(GraphUtils.get_adjacency_matrix(self.__graph))
 
-        print('\nDijkstra:')
+        print("\nDijkstra:")
         print(GraphAlgorithms.dijkstra(self.__graph, self.__graph.vertices[0]))
 
-        print('\nFloyd-Warshall:')
+        print("\nFloyd-Warshall:")
         print(GraphAlgorithms.floyd_warshall(self.__graph))
 
-    
-if __name__ == '__main__':
-    graph = GraphUtils.read_graph('graph.txt')
+
+if __name__ == "__main__":
+    graph = GraphUtils.read_graph("graph.txt")
     GraphTest(graph).test()
-    
