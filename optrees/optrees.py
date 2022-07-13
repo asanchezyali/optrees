@@ -1,13 +1,9 @@
-from __future__ import annotations
-
 import numpy as np
-
-from graphs import NotOrientedGraph
-from graphs import Vertex
+from graphs import NotOrientedGraph, Vertex
 
 
 def prim(graph: NotOrientedGraph, initial_vertex: Vertex) -> NotOrientedGraph:
-    """ This algorithms to solve the problem of the minimum spanning tree is
+    """This algorithms to solve the problem of the minimum spanning tree is
     Prim's algorithm. Developed for the first time by the Czech
     mathematician Vojtêch Jarnık, it would not be until later, in 1957,
     when it would appear published independently under the authorship of
