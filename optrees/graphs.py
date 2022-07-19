@@ -17,7 +17,9 @@ class Vertex:
         return self.__neighbors
 
     def add_neighbor(self, vertex: 'Vertex', weight: float = None, orientation: str = '-'):
-        if self is not vertex:
+        isSameVertex = self is vertex
+        alreadyExists = vertex.label in self.neighbors.keys() and vertex.value in self.neighbors.values()
+        if not isSameVertex and not alreadyExists:
             self.__neighbors[vertex.label] = vertex
             edge = Edge(
                 label=f'{self.label}{orientation}{vertex.label}',
@@ -30,24 +32,33 @@ class Vertex:
             vertex.add_edge(edge)
             vertex.__neighbors[self.label] = self
         else:
-            raise ValueError('It is the same vertex.')
+            raise ValueError('It is the same vertex or already exists.')
 
-    def delete_neighbor(self, vertex_label: str):
-        try:
-            del self.__neighbors[vertex_label]
+    def disconnect_neighbor(self, vertex: 'Vertex'):
+        if self is not vertex:
+            del self.__neighbors[vertex.label]
+            del vertex.__neighbors[self.label]
+            edge_to_delete = list()
             for edge in self.__edges.values():
-                if edge.is_vertex(vertex_label):
+                if edge.is_vertex(vertex.label):
+                    edge_to_delete.append(edge)
                     del self.__edges[edge.label]
-                    del self.__loops[edge.label]
-        except KeyError:
-            raise KeyError(f'Vertex {vertex_label} does not exist.')
+                    del vertex.__edges[edge.label]
+                break
+        else:
+            raise KeyError(f'Vertex {vertex.label} does not exist or is the same vertex.')
 
-    def neighbor(self, label: str) -> 'Vertex':
+    def get_neighbor(self, label: str) -> 'Vertex':
         return self.neighbors.get(label)
 
     def remove_edge(self, edge: 'Edge'):
         if edge.label in self.__edges.keys():
-            del self.__edges[edge.label]
+            right_vertex = edge.right_vertex
+            left_vertex = edge.left_vertex
+            del right_vertex.__neighbors[left_vertex.label]
+            del left_vertex.__neighbors[right_vertex.label]
+            del right_vertex.__edges[edge.label]
+            del left_vertex.__edges[edge.label]
         else:
             raise ValueError('This edge does not exist.')
 
