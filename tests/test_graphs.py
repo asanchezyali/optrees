@@ -120,20 +120,6 @@ def test_add_weighted_and_unoriented_neighbors():
     assert edge_ab.right_vertex == vertex_b
     assert edge_ab.loop == False
 
-def test_disconnect_neighbor():
-    vertex_a = Vertex('a')
-    vertex_b = Vertex('b')
-    vertex_a.add_neighbor(vertex_b)
-    vertex_a.disconnect_neighbor(vertex_b)
-    assert vertex_b.label not in vertex_a.neighbors.keys()
-    assert vertex_b not in vertex_a.neighbors.values()
-    assert vertex_a.label not in vertex_b.neighbors.keys()
-    assert vertex_a not in vertex_b.neighbors.values()
-    assert 'a-b' not in vertex_a.edges.keys()
-    assert 'a-b' not in vertex_b.edges.keys()
-    assert vertex_a.loops == dict()
-    assert vertex_b.loops == dict()
-
 def test_get_neighbor():
     vertex_a = Vertex('a')
     vertex_b = Vertex('b')
@@ -145,18 +131,3 @@ def test_get_neighbor_none():
     vertex_b = Vertex('b')
     vertex_a.add_neighbor(vertex_b)
     assert vertex_a.get_neighbor('c') == None
-
-def test_remove_edge():
-    vertex_a = Vertex('a')
-    vertex_b = Vertex('b')
-    vertex_a.add_neighbor(vertex_b)
-    edge = vertex_a.edge('a-b')
-    vertex_a.remove_edge(edge)
-    assert vertex_b.label not in vertex_a.neighbors.keys()
-    assert vertex_b not in vertex_a.neighbors.values()
-    assert vertex_a.label not in vertex_b.neighbors.keys()
-    assert vertex_a not in vertex_b.neighbors.values()
-    assert 'a-b' not in vertex_a.edges.keys()
-    assert 'a-b' not in vertex_b.edges.keys()
-    assert vertex_a.loops == dict()
-    assert vertex_b.loops == dict()

@@ -34,33 +34,8 @@ class Vertex:
         else:
             raise ValueError('It is the same vertex or already exists.')
 
-    def disconnect_neighbor(self, vertex: 'Vertex'):
-        if self is not vertex:
-            del self.__neighbors[vertex.label]
-            del vertex.__neighbors[self.label]
-            edge_to_delete = list()
-            for edge in self.__edges.values():
-                if edge.is_vertex(vertex.label):
-                    edge_to_delete.append(edge)
-                    del self.__edges[edge.label]
-                    del vertex.__edges[edge.label]
-                break
-        else:
-            raise KeyError(f'Vertex {vertex.label} does not exist or is the same vertex.')
-
     def get_neighbor(self, label: str) -> 'Vertex':
         return self.neighbors.get(label)
-
-    def remove_edge(self, edge: 'Edge'):
-        if edge.label in self.__edges.keys():
-            right_vertex = edge.right_vertex
-            left_vertex = edge.left_vertex
-            del right_vertex.__neighbors[left_vertex.label]
-            del left_vertex.__neighbors[right_vertex.label]
-            del right_vertex.__edges[edge.label]
-            del left_vertex.__edges[edge.label]
-        else:
-            raise ValueError('This edge does not exist.')
 
     def get_weight(self, vertex: 'Vertex') -> float:
         return self.__edges.get(vertex.label).weight
