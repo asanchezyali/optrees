@@ -6,7 +6,6 @@ def test_default_initial_vertex():
     assert vertex_a.label == 'a'
     assert vertex_a.neighbors == dict()
     assert vertex_a.edges == dict()
-    assert vertex_a.loops == dict()
 
 def test_delete_vertex():
     vertex_a = Vertex('a')
@@ -43,8 +42,6 @@ def test_add_unweighted_and_unoriented_neighbors():
     assert vertex_a in vertex_b.neighbors.values()
     assert 'a-b' in vertex_a.edges.keys()
     assert 'a-b' in vertex_b.edges.keys()
-    assert vertex_a.loops == dict()
-    assert vertex_b.loops == dict()
     assert edge_ab.label == 'a-b'
     assert edge_ab.weight == None
     assert edge_ab.orientation == '-'
@@ -52,7 +49,6 @@ def test_add_unweighted_and_unoriented_neighbors():
     assert edge_ab.end == None
     assert edge_ab.left_vertex == vertex_a
     assert edge_ab.right_vertex == vertex_b
-    assert edge_ab.loop == False
 
 def test_add_weighted_and_oriented_neighbors():
     vertex_a = Vertex('a')
@@ -65,8 +61,6 @@ def test_add_weighted_and_oriented_neighbors():
     assert vertex_a in vertex_b.neighbors.values()
     assert 'a->b' in vertex_a.edges.keys()
     assert 'a->b' in vertex_b.edges.keys()
-    assert vertex_a.loops == dict()
-    assert vertex_b.loops == dict()
     assert edge_ab.label == 'a->b'
     assert edge_ab.weight == 1.0
     assert edge_ab.orientation == '->'
@@ -74,7 +68,6 @@ def test_add_weighted_and_oriented_neighbors():
     assert edge_ab.end == vertex_b
     assert edge_ab.left_vertex == vertex_a
     assert edge_ab.right_vertex == vertex_b
-    assert edge_ab.loop == False
 
 def test_add_unweighted_and_oriented_neighbors():
     vertex_a = Vertex('a')
@@ -87,8 +80,6 @@ def test_add_unweighted_and_oriented_neighbors():
     assert vertex_a in vertex_b.neighbors.values()
     assert 'a->b' in vertex_a.edges.keys()
     assert 'a->b' in vertex_b.edges.keys()
-    assert vertex_a.loops == dict()
-    assert vertex_b.loops == dict()
     assert edge_ab.label == 'a->b'
     assert edge_ab.weight == None
     assert edge_ab.orientation == '->'
@@ -96,7 +87,6 @@ def test_add_unweighted_and_oriented_neighbors():
     assert edge_ab.end == vertex_b
     assert edge_ab.left_vertex == vertex_a
     assert edge_ab.right_vertex == vertex_b
-    assert edge_ab.loop == False
 
 def test_add_weighted_and_unoriented_neighbors():
     vertex_a = Vertex('a')
@@ -109,8 +99,6 @@ def test_add_weighted_and_unoriented_neighbors():
     assert vertex_a in vertex_b.neighbors.values()
     assert 'a-b' in vertex_a.edges.keys()
     assert 'a-b' in vertex_b.edges.keys()
-    assert vertex_a.loops == dict()
-    assert vertex_b.loops == dict()
     assert edge_ab.label == 'a-b'
     assert edge_ab.weight == 1.0
     assert edge_ab.orientation == '-'

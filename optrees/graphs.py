@@ -3,7 +3,6 @@ class Vertex:
         self.__label = label
         self.__neighbors = dict()
         self.__edges = dict()
-        self.__loops = dict()
 
     def __del__(self):
         print(f'Vertex {self.label} is deleted.')
@@ -50,13 +49,6 @@ class Vertex:
     def edge(self, label: str) -> str:
         return self.edges.get(label)
 
-    @property
-    def loops(self) -> dict:
-        return self.__loops
-
-    def loop(self, label: str) -> str:
-        return self.loops.get(label)
-
     def is_isolated(self) -> bool:
         return len(self.neighbors) == 0
 
@@ -89,8 +81,6 @@ class Edge:
             if orientation not in orientations.keys()
             else orientations.get(orientation).get('end')
         )
-        self.__loop = True if left_vertex == right_vertex else False
-
         left_vertex.add_edge(self)
         right_vertex.add_edge(self)
 
