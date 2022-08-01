@@ -1,6 +1,6 @@
 from optrees import Vertex
 
-class BasicEdge():
+class BasicEdge:
     def __init__(self, left_vertex, right_vertex, label=None, weight=None, orientation='-'):
         self.__label = label if label else f'{left_vertex.label} {orientation} {right_vertex.label}'
         self.__left_vertex = left_vertex
