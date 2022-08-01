@@ -1,3 +1,4 @@
 from .version import __version__
 
-from .graphs import *
+from .vertex import *
+from .edge import *
