@@ -1,5 +1,5 @@
 from .version import __version__
 
-from .vertex import *
-from .edge import *
-from .graph import *
+from .vertex.vertex import *
+from .edge.edge import *
+from .graph.graph import *
