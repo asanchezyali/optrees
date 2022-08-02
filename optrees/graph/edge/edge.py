@@ -40,10 +40,11 @@ class BasicEdge:
 
     def __contains__(self, other):
         if isinstance(other, Vertex):
-            return other in [self.__left_vertex, self.__right_vertex]
+            return other.label in [self.__left_vertex.label, self.__right_vertex.label]
         return False
 
-    def validate_and_get_orientation(self, orientation: str) -> bool:
+    @staticmethod
+    def validate_and_get_orientation(orientation: str) -> bool:
         if orientation in ['->', '<-', '-']:
             return orientation
         else:
