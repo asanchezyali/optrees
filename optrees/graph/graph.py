@@ -1,4 +1,3 @@
-from turtle import left
 from typing import Tuple
 from optrees import Vertex, Edge
 

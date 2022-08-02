@@ -1,12 +1,12 @@
 from optrees import Vertex
 
 class BasicEdge:
-    def __init__(self, left_vertex, right_vertex, label=None, weight=None, orientation='-'):
-        self.__label = label if label else f'{left_vertex.label} {orientation} {right_vertex.label}'
+    def __init__(self, left_vertex, right_vertex, weight=None, orientation='-', label=None):
         self.__left_vertex = left_vertex
         self.__right_vertex = right_vertex
         self.__weight = weight
         self.__orientation = self.validate_and_get_orientation(orientation)
+        self.__label = label if label else f'{left_vertex.label} {orientation} {right_vertex.label}'
         self.__start = (
             None
             if orientation not in ['->', '<-']
@@ -88,5 +88,5 @@ class BasicEdge:
 
 
 class Edge(BasicEdge):
-    def __init__(self, left_vertex, right_vertex, label=None, weight=None, orientation='-'):
-        super().__init__(left_vertex, right_vertex, label, weight, orientation)
+    def __init__(self, left_vertex, right_vertex, weight=None, orientation='-', label=None):
+        super().__init__(left_vertex, right_vertex, weight, orientation, label)

@@ -10,18 +10,14 @@ def prim(graph: Graph):
                 min_edge = None
                 for edge in vertex.edges.values():
                     if mst_graph.vertices_count > 0:
-                        bridge = edge.right_vertex in mst_graph and edge.left_vertex not in mst_graph
-                        reversed_bridge = (
-                            edge.left_vertex in mst_graph and edge.right_vertex not in mst_graph
-                        )
+                        bridge = edge.right_vertex in mst_graph or edge.left_vertex in mst_graph
                     else:
                         bridge = True
-                        reversed_bridge = True
-                    if (edge.weight < min_weight) and (bridge or reversed_bridge):
+                    if (edge.weight < min_weight) and bridge:
                         min_weight = edge.weight
                         min_edge = edge
                 if min_edge is not None:
                     mst_graph.add_edge(min_edge)
-                if min_edge is None:
+                else:
                     raise ValueError('The graph is not connected.')
     return mst_graph
