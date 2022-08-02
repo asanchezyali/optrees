@@ -34,7 +34,7 @@ class BasicVertex:
         return self.__neighbors
 
     def add_neighbor(self, vertex, weight=None, orientation='-'):
-        from optrees.edge import Edge
+        from optrees.graph.edge.edge import Edge
         if not isinstance(vertex, BasicVertex):
             raise TypeError('The vertex is not valid.')
         same_vertex = self is vertex
