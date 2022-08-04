@@ -131,3 +131,5 @@ dmypy.json
 # pycharm
 .idea
 *.DS_Store
+.vscode/settings.json
+.vscode/settings.json

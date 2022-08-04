@@ -1,5 +1,6 @@
 from typing import Tuple
-from optrees import Vertex, Edge
+
+from optrees import Edge, Vertex
 from optrees.helpers.lists import item_check_exists
 
 
