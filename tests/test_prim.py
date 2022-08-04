@@ -1,5 +1,6 @@
 from optrees import Graph, prim
 
+
 def test_prim_with_connected_graph():
     graph_tuples_list = [
         ('a', 'b', 1),
@@ -8,7 +9,7 @@ def test_prim_with_connected_graph():
         ('b', 'd', 4),
         ('c', 'd', 5),
         ('c', 'e', 6),
-        ('d', 'e', 7),    
+        ('d', 'e', 7),
         ('d', 'f', 8),
         ('e', 'f', 9),
         ('e', 'g', 10),
@@ -60,7 +61,8 @@ def test_prim_with_connected_graph():
     assert min_spanning_tree.vertices_count == 17
     assert min_spanning_tree.edges_count == 16
     assert min_spanning_tree == mst_graph
-                
+
+
 def test_prim_with_disconnected_graph():
     graph_tuples_list = [
         ('a', 'b', 1),
@@ -69,7 +71,7 @@ def test_prim_with_disconnected_graph():
         ('b', 'd', 4),
         ('c', 'd', 5),
         ('c', 'e', 6),
-        ('d', 'e', 7),    
+        ('d', 'e', 7),
         ('d', 'f', 8),
         ('e', 'f', 9),
         ('e', 'g', 10),
@@ -100,6 +102,6 @@ def test_prim_with_disconnected_graph():
     try:
         prim(graph)
         check_exist_min_spanning_tree = True
-    except:
+    except Exception:
         check_exist_min_spanning_tree = False
-    assert check_exist_min_spanning_tree == False
+    assert check_exist_min_spanning_tree is False

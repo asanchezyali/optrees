@@ -53,12 +53,12 @@ class BasicVertex:
             vertex.__edges[edge.label] = edge
         else:
             raise ValueError('The vertex is already a neighbor.')
-    
+
 
 class Vertex(BasicVertex):
     def __init__(self, label: str):
         super().__init__(label)
-    
+
     def amount_of_neighbors(self) -> int:
         return len(super().neighbors)
 

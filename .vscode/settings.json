@@ -1,0 +1,5 @@
+{
+    "python.analysis.inlayHints.functionReturnTypes": false,
+    "python.analysis.inlayHints.variableTypes": false,
+    "python.analysis.completeFunctionParens": false
+}

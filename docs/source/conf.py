@@ -1,3 +1,5 @@
+# flake8: noqa
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
@@ -32,14 +34,14 @@ sys.path.insert(0, os.path.abspath('../../optrees'))
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc',
-    'sphinx.ext.doctest',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.todo',
-    'sphinx.ext.coverage',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.ifconfig',
-    'sphinx.ext.viewcode',
-    'sphinx.ext.githubpages']
+              'sphinx.ext.doctest',
+              'sphinx.ext.intersphinx',
+              'sphinx.ext.todo',
+              'sphinx.ext.coverage',
+              'sphinx.ext.mathjax',
+              'sphinx.ext.ifconfig',
+              'sphinx.ext.viewcode',
+              'sphinx.ext.githubpages']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -128,7 +130,6 @@ html_static_path = ['_static']
 htmlhelp_basename = 'mainDoc'
 
 
-
 # -- Options for LaTeX output ---------------------------------------------
 
 latex_engine = 'pdflatex'
@@ -136,13 +137,13 @@ latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
     #
     'papersize': 'letterpaper',
-    'releasename':" ",
+    'releasename': " ",
     # Sonny, Lenny, Glenn, Conny, Rejne, Bjarne and Bjornstrup
     # 'fncychap': '\\usepackage[Lenny]{fncychap}',
     'fncychap': '\\usepackage{fncychap}',
     'fontpkg': '\\usepackage{amsmath,amsfonts,amssymb,amsthm}',
 
-    'figure_align':'htbp',
+    'figure_align': 'htbp',
     # The font size ('10pt', '11pt' or '12pt').
     #
     'pointsize': '12pt',
@@ -274,14 +275,14 @@ latex_elements = {
     #
     # 'figure_align': 'htbp',
     'sphinxsetup': \
-        'hmargin={0.7in,0.7in}, vmargin={1in,1in}, \
+    'hmargin={0.7in,0.7in}, vmargin={1in,1in}, \
         verbatimwithframe=true, \
         TitleColor={rgb}{0,0,0}, \
         HeaderFamily=\\rmfamily\\bfseries, \
         InnerLinkColor={rgb}{0,0,1}, \
         OuterLinkColor={rgb}{0,0,1}',
 
-        'tableofcontents':' ',
+    'tableofcontents': ' ',
 
 
 
@@ -319,14 +320,14 @@ epub_copyright = copyright
 epub_exclude_files = ['search.html']
 
 
-
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'https://docs.python.org/': None}
 
 
 def setup(app):
     app.add_stylesheet('custom.css')  # remove line numbers
-    app.add_javascript('copybutton.js') # show/hide prompt >>>
+    app.add_javascript('copybutton.js')  # show/hide prompt >>>
+
 
 # use :numref: for references (instead of :ref:)
 numfig = True

@@ -1,5 +1,6 @@
 from optrees import Vertex, Edge, Graph
 
+
 def test_default_initial_graph():
     graph = Graph('G')
     assert graph.label == 'G'
@@ -7,6 +8,7 @@ def test_default_initial_graph():
     assert graph.edges == dict()
     assert graph.vertices_count == 0
     assert graph.edges_count == 0
+
 
 def test_delete_graph():
     graph = Graph('G')
@@ -16,15 +18,18 @@ def test_delete_graph():
         check_exists = True
     except NameError:
         check_exists = False
-    assert check_exists == False
+    assert check_exists is False
+
 
 def test_repr():
     graph = Graph('G')
     assert graph.__repr__() == f'Graph({graph.label})'
 
+
 def test_label():
     graph = Graph('G')
     assert graph.label == 'G'
+
 
 def test_add_vertex():
     graph = Graph('G')
@@ -37,7 +42,8 @@ def test_add_vertex():
         check_exists = True
     except ValueError:
         check_exists = False
-    assert check_exists == False
+    assert check_exists is False
+
 
 def test_add_vertices():
     graph = Graph('G')
@@ -51,7 +57,8 @@ def test_add_vertices():
         check_exists = True
     except ValueError:
         check_exists = False
-    assert check_exists == False
+    assert check_exists is False
+
 
 def test_add_edge():
     graph = Graph('G')
@@ -66,7 +73,8 @@ def test_add_edge():
         check_exists = True
     except ValueError:
         check_exists = False
-    assert check_exists == False
+    assert check_exists is False
+
 
 def test_add_edges():
     graph = Graph('G')
@@ -83,7 +91,8 @@ def test_add_edges():
         check_exists = True
     except ValueError:
         check_exists = False
-    assert check_exists == False
+    assert check_exists is False
+
 
 def remove_vertex():
     graph = Graph('G')
@@ -101,7 +110,8 @@ def remove_vertex():
         check_exists = True
     except ValueError:
         check_exists = False
-    assert check_exists == False
+    assert check_exists is False
+
 
 def remove_vertices():
     graph = Graph('G')
@@ -119,7 +129,8 @@ def remove_vertices():
         check_exists = True
     except ValueError:
         check_exists = False
-    assert check_exists == False
+    assert check_exists is False
+
 
 def remove_edge():
     graph = Graph('G')
@@ -137,7 +148,8 @@ def remove_edge():
         check_exists = True
     except ValueError:
         check_exists = False
-    assert check_exists == False
+    assert check_exists is False
+
 
 def remove_edges():
     graph = Graph('G')
@@ -155,7 +167,8 @@ def remove_edges():
         check_exists = True
     except ValueError:
         check_exists = False
-    assert check_exists == False
+    assert check_exists is False
+
 
 def test_from_list():
     graph = Graph('G')
