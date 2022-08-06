@@ -19,7 +19,7 @@ Sphinx format for Latex and HTML
       graphs
       optrees
 
- 
+
 
 
 

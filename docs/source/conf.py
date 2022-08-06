@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # 'BASIC GRAPHS' documentation build configuration file, created by
 # sphinx-quickstart on Thu Oct  5 21:04:22 2017.
@@ -19,6 +18,7 @@
 #
 import os
 import sys
+
 sys.path.insert(0, os.path.abspath('../../optrees'))
 
 
@@ -31,7 +31,8 @@ sys.path.insert(0, os.path.abspath('../../optrees'))
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc',
+extensions = [
+    'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
@@ -39,7 +40,8 @@ extensions = ['sphinx.ext.autodoc',
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
-    'sphinx.ext.githubpages']
+    'sphinx.ext.githubpages',
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -128,7 +130,6 @@ html_static_path = ['_static']
 htmlhelp_basename = 'mainDoc'
 
 
-
 # -- Options for LaTeX output ---------------------------------------------
 
 latex_engine = 'pdflatex'
@@ -136,17 +137,15 @@ latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
     #
     'papersize': 'letterpaper',
-    'releasename':" ",
+    'releasename': ' ',
     # Sonny, Lenny, Glenn, Conny, Rejne, Bjarne and Bjornstrup
     # 'fncychap': '\\usepackage[Lenny]{fncychap}',
     'fncychap': '\\usepackage{fncychap}',
     'fontpkg': '\\usepackage{amsmath,amsfonts,amssymb,amsthm}',
-
-    'figure_align':'htbp',
+    'figure_align': 'htbp',
     # The font size ('10pt', '11pt' or '12pt').
     #
     'pointsize': '12pt',
-
     # Additional stuff for the LaTeX preamble.
     #
     'preamble': r'''
@@ -225,40 +224,38 @@ latex_elements = {
 
         %%%%%%%%%%% Quote Styles at the top of chapter
         \usepackage{epigraph}
-        \setlength{\epigraphwidth}{0.8\columnwidth} 
+        \setlength{\epigraphwidth}{0.8\columnwidth}
         \newcommand{\chapterquote}[2]{\epigraphhead[60]{\epigraph{\textit{#1}}{\textbf {\textit{--#2}}}}}
         %%%%%%%%%%% Quote for all places except Chapter
         \newcommand{\sectionquote}[2]{{\quote{\textit{``#1''}}{\textbf {\textit{--#2}}}}}
     ''',
-
-
     'maketitle': r'''
         \pagenumbering{Roman} %%% to avoid page 1 conflict with actual page 1
 
-        \begin{titlepage}   
+        \begin{titlepage}
             \centering
-            
+
             \vspace*{40mm} %%% * is used to give space from top
             \textbf{\Huge {Sphinx format for Latex and HTML}}
-            
+
             \vspace{0mm}
             % \begin{figure}[!h]
             %    \centering
             %    \includegraphics[scale=0.3]{logo.jpg}
             % \end{figure}
-            
-            \vspace{0mm} 
+
+            \vspace{0mm}
             \Large \textbf{{Meher Krishna Patel}}
-            
+
             \small Created on : Octorber, 2017
-            
+
             \vspace*{0mm}
             \small  Last updated : \MonthYearFormat\today
-            
-            
+
+
             %% \vfill adds at the bottom
             \vfill
-            \small \textit{More documents are freely available at }{\href{http://pythondsp.readthedocs.io/en/latest/pythondsp/toc.html}{PythonDSP}} 
+            \small \textit{More documents are freely available at }{\href{http://pythondsp.readthedocs.io/en/latest/pythondsp/toc.html}{PythonDSP}}
         \end{titlepage}
 
         \clearpage
@@ -273,18 +270,13 @@ latex_elements = {
     # Latex figure (float) alignment
     #
     # 'figure_align': 'htbp',
-    'sphinxsetup': \
-        'hmargin={0.7in,0.7in}, vmargin={1in,1in}, \
+    'sphinxsetup': 'hmargin={0.7in,0.7in}, vmargin={1in,1in}, \
         verbatimwithframe=true, \
         TitleColor={rgb}{0,0,0}, \
         HeaderFamily=\\rmfamily\\bfseries, \
         InnerLinkColor={rgb}{0,0,1}, \
         OuterLinkColor={rgb}{0,0,1}',
-
-        'tableofcontents':' ',
-
-
-
+    'tableofcontents': ' ',
 }
 
 latex_logo = '_static/logo.jpg'
@@ -293,8 +285,13 @@ latex_logo = '_static/logo.jpg'
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'main.tex', 'Sphinx format for Latex and HTML',
-     'Meher Krishna Patel', 'report')
+    (
+        master_doc,
+        'main.tex',
+        'Sphinx format for Latex and HTML',
+        'Meher Krishna Patel',
+        'report',
+    )
 ]
 
 
@@ -319,14 +316,14 @@ epub_copyright = copyright
 epub_exclude_files = ['search.html']
 
 
-
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'https://docs.python.org/': None}
 
 
 def setup(app):
     app.add_stylesheet('custom.css')  # remove line numbers
-    app.add_javascript('copybutton.js') # show/hide prompt >>>
+    app.add_javascript('copybutton.js')  # show/hide prompt >>>
+
 
 # use :numref: for references (instead of :ref:)
 numfig = True

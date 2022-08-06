@@ -9,7 +9,7 @@ def kruskal(graph: Graph):
         reverse=True,
     )
 
-    minimum_spanning_forest = Graph("MSF")
+    minimum_spanning_forest = Graph('MSF')
     while minimum_spanning_forest.edges_count < graph.vertices_count and len(edges) > 0:
         edge = edges.pop()
         if forests[edge.right_vertex.label] != forests[edge.left_vertex.label]:

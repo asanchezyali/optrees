@@ -35,10 +35,14 @@ class BasicVertex:
 
     def add_neighbor(self, vertex, weight=None, orientation='-'):
         from optrees.graph.edge.edge import Edge
+
         if not isinstance(vertex, BasicVertex):
             raise TypeError('The vertex is not valid.')
         same_vertex = self is vertex
-        already_neighbor = vertex.label in self.__neighbors.keys() and self.__neighbors[vertex.label] is vertex
+        already_neighbor = (
+            vertex.label in self.__neighbors.keys()
+            and self.__neighbors[vertex.label] is vertex
+        )
         if not same_vertex and not already_neighbor:
             self.__neighbors[vertex.label] = vertex
             vertex.__neighbors[self.label] = self
@@ -47,18 +51,18 @@ class BasicVertex:
                 left_vertex=self,
                 right_vertex=vertex,
                 weight=weight,
-                orientation=orientation
+                orientation=orientation,
             )
             self.__edges[edge.label] = edge
             vertex.__edges[edge.label] = edge
         else:
             raise ValueError('The vertex is already a neighbor.')
-    
+
 
 class Vertex(BasicVertex):
     def __init__(self, label: str):
         super().__init__(label)
-    
+
     def amount_of_neighbors(self) -> int:
         return len(super().neighbors)
 

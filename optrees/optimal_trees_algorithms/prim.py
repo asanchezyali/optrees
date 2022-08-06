@@ -1,5 +1,7 @@
 import numpy as np
+
 from optrees import Graph
+
 
 def prim(graph: Graph):
     mst_graph = Graph('MST')
@@ -10,7 +12,10 @@ def prim(graph: Graph):
                 min_edge = None
                 for edge in vertex.edges.values():
                     if mst_graph.vertices_count > 0:
-                        bridge = edge.right_vertex in mst_graph or edge.left_vertex in mst_graph
+                        bridge = (
+                            edge.right_vertex in mst_graph
+                            or edge.left_vertex in mst_graph
+                        )
                     else:
                         bridge = True
                     if (edge.weight < min_weight) and bridge:

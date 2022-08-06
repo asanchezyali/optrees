@@ -12,15 +12,15 @@ http://sphinxguide.readthedocs.io/en/latest/
 conf.py settings for Latex
 ==========================
 
-* Replace the contents of conf.py with following contents, 
-* Change the name of the document i.e. replace "Sphinx format for Latex and HTML" with correct name. 
+* Replace the contents of conf.py with following contents,
+* Change the name of the document i.e. replace "Sphinx format for Latex and HTML" with correct name.
 * Change the date in "Created on : October, 2017".
-* Change 'main.tex' with desired file name. 
+* Change 'main.tex' with desired file name.
 * If require, uncomment '\\listoffigures' and '\\listoftables' for table of contents.
 * Change margin in 'sphinxsetup', in required.
 * Copy all files of \_static and \_template folder to current project. These can be downloaded from this repository.
-* Change 'report' to 'book' in 'latex_documents' for double-sided printing format. 
-* The complete template is loaded for further clarification. 
+* Change 'report' to 'book' in 'latex_documents' for double-sided printing format.
+* The complete template is loaded for further clarification.
 
 .. code-block:: python
 
@@ -57,32 +57,34 @@ conf.py settings for Latex
     # Add any Sphinx extension module names here, as strings. They can be
     # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
     # ones.
-    extensions = ['sphinx.ext.autodoc',
-        'sphinx.ext.doctest',
-        'sphinx.ext.intersphinx',
-        'sphinx.ext.todo',
-        'sphinx.ext.coverage',
-        'sphinx.ext.mathjax',
-        'sphinx.ext.ifconfig',
-        'sphinx.ext.viewcode',
-        'sphinx.ext.githubpages']
+    extensions = [
+        "sphinx.ext.autodoc",
+        "sphinx.ext.doctest",
+        "sphinx.ext.intersphinx",
+        "sphinx.ext.todo",
+        "sphinx.ext.coverage",
+        "sphinx.ext.mathjax",
+        "sphinx.ext.ifconfig",
+        "sphinx.ext.viewcode",
+        "sphinx.ext.githubpages",
+    ]
 
     # Add any paths that contain templates here, relative to this directory.
-    templates_path = ['_templates']
+    templates_path = ["_templates"]
 
     # The suffix(es) of source filenames.
     # You can specify multiple suffix as a list of string:
     #
     # source_suffix = ['.rst', '.md']
-    source_suffix = '.rst'
+    source_suffix = ".rst"
 
     # The master toctree document.
-    master_doc = 'index'
+    master_doc = "index"
 
     # General information about the project.
-    project = 'Sphinx format for Latex and HTML'
-    copyright = '2017, Meher Krishna Patel'
-    author = 'Meher Krishna Patel'
+    project = "Sphinx format for Latex and HTML"
+    copyright = "2017, Meher Krishna Patel"
+    author = "Meher Krishna Patel"
 
     # The version info for the project you're documenting, acts as replacement for
     # |version| and |release|, also used in various other places throughout the
@@ -106,7 +108,7 @@ conf.py settings for Latex
     exclude_patterns = []
 
     # The name of the Pygments (syntax highlighting) style to use.
-    pygments_style = 'sphinx'
+    pygments_style = "sphinx"
 
     # If true, `todo` and `todoList` produce output, else they produce nothing.
     todo_include_todos = True
@@ -119,7 +121,7 @@ conf.py settings for Latex
     #
     # html_theme = 'nature'
     # html_theme = 'alabaster'
-    html_theme = 'sphinx_rtd_theme'
+    html_theme = "sphinx_rtd_theme"
 
     # Theme options are theme-specific and customize the look and feel of a theme
     # further.  For a list of options available for each theme, see the
@@ -130,7 +132,7 @@ conf.py settings for Latex
     # Add any paths that contain custom static files (such as style sheets) here,
     # relative to this directory. They are copied after the builtin static files,
     # so a file named "default.css" will overwrite the builtin "default.css".
-    html_static_path = ['_static']
+    html_static_path = ["_static"]
 
     # Custom sidebar templates, must be a dictionary that maps document names
     # to template names.
@@ -151,31 +153,28 @@ conf.py settings for Latex
     # -- Options for HTMLHelp output ------------------------------------------
 
     # Output file base name for HTML help builder.
-    htmlhelp_basename = 'mainDoc'
-
+    htmlhelp_basename = "mainDoc"
 
 
     # -- Options for LaTeX output ---------------------------------------------
 
-    latex_engine = 'pdflatex'
+    latex_engine = "pdflatex"
     latex_elements = {
         # The paper size ('letterpaper' or 'a4paper').
         #
-        'papersize': 'a4paper',
-        'releasename':" ",
+        "papersize": "a4paper",
+        "releasename": " ",
         # Sonny, Lenny, Glenn, Conny, Rejne, Bjarne and Bjornstrup
         # 'fncychap': '\\usepackage[Lenny]{fncychap}',
-        'fncychap': '\\usepackage{fncychap}',
+        "fncychap": "\\usepackage{fncychap}",
         # 'fontpkg': ' ',
-
-        'figure_align':'htbp',
+        "figure_align": "htbp",
         # The font size ('10pt', '11pt' or '12pt').
         #
-        'pointsize': '10pt',
-
+        "pointsize": "10pt",
         # Additional stuff for the LaTeX preamble.
         #
-        'preamble': r'''
+        "preamble": r"""
             %%%%%%%%%%%%%%%%%%%% Meher %%%%%%%%%%%%%%%%%%
             %%%add number to subsubsection 2=subsection, 3=subsubsection
             %%% below subsubsection is not good idea.
@@ -251,40 +250,38 @@ conf.py settings for Latex
 
             %%%%%%%%%%% Quote Styles at the top of chapter
             \usepackage{epigraph}
-            \setlength{\epigraphwidth}{0.8\columnwidth} 
+            \setlength{\epigraphwidth}{0.8\columnwidth}
             \newcommand{\chapterquote}[2]{\epigraphhead[60]{\epigraph{\textit{#1}}{\textbf {\textit{--#2}}}}}
             %%%%%%%%%%% Quote for all places except Chapter
             \newcommand{\sectionquote}[2]{{\quote{\textit{``#1''}}{\textbf {\textit{--#2}}}}}
-        ''',
-
-
-        'maketitle': r'''
+        """,
+        "maketitle": r"""
             \pagenumbering{Roman} %%% to avoid page 1 conflict with actual page 1
 
-            \begin{titlepage}   
+            \begin{titlepage}
                 \centering
-                
+
                 \vspace*{40mm} %%% * is used to give space from top
                 \textbf{\Huge {Sphinx format for Latex and HTML}}
-                
+
                 \vspace{0mm}
                 \begin{figure}[!h]
                     \centering
                     \includegraphics[scale=0.3]{logo.jpg}
                 \end{figure}
-                
-                \vspace{0mm} 
+
+                \vspace{0mm}
                 \Large \textbf{{Meher Krishna Patel}}
-                
+
                 \small Created on : Octorber, 2017
-                
+
                 \vspace*{0mm}
                 \small  Last updated : \MonthYearFormat\today
-                
-                
+
+
                 %% \vfill adds at the bottom
                 \vfill
-                \small \textit{More documents are freely available at }{\href{http://pythondsp.readthedocs.io/en/latest/pythondsp/toc.html}{PythonDSP}} 
+                \small \textit{More documents are freely available at }{\href{http://pythondsp.readthedocs.io/en/latest/pythondsp/toc.html}{PythonDSP}}
             \end{titlepage}
 
             \clearpage
@@ -295,29 +292,29 @@ conf.py settings for Latex
             \clearpage
             \pagenumbering{arabic}
 
-            ''',
+            """,
         # Latex figure (float) alignment
         #
         # 'figure_align': 'htbp',
-        'sphinxsetup': \
-            'hmargin={0.7in,0.7in}, vmargin={1in,1in}, \
+        "sphinxsetup": "hmargin={0.7in,0.7in}, vmargin={1in,1in}, \
             verbatimwithframe=true, \
-            TitleColor={rgb}{0,0,0}',
-
-            'tableofcontents':' ',
-
-
-
+            TitleColor={rgb}{0,0,0}",
+        "tableofcontents": " ",
     }
 
-    latex_logo = '_static/logo.jpg'
+    latex_logo = "_static/logo.jpg"
 
     # Grouping the document tree into LaTeX files. List of tuples
     # (source start file, target name, title,
     #  author, documentclass [howto, manual, or own class]).
     latex_documents = [
-        (master_doc, 'main.tex', 'Sphinx format for Latex and HTML',
-         'Meher Krishna Patel', 'report')
+        (
+            master_doc,
+            "main.tex",
+            "Sphinx format for Latex and HTML",
+            "Meher Krishna Patel",
+            "report",
+        )
     ]
 
 
@@ -339,19 +336,19 @@ conf.py settings for Latex
     # epub_uid = ''
 
     # A list of files that should not be packed into the epub file.
-    epub_exclude_files = ['search.html']
-
+    epub_exclude_files = ["search.html"]
 
 
     # Example configuration for intersphinx: refer to the Python standard library.
-    intersphinx_mapping = {'https://docs.python.org/': None}
+    intersphinx_mapping = {"https://docs.python.org/": None}
 
 
     def setup(app):
-        app.add_stylesheet('custom.css')  # remove line numbers
-        app.add_javascript('copybutton.js') # show/hide prompt >>>
+        app.add_stylesheet("custom.css")  # remove line numbers
+        app.add_javascript("copybutton.js")  # show/hide prompt >>>
+
 
     # use :numref: for references (instead of :ref:)
     numfig = True
     smart_quotes = False
-    html_theme = 'sphinx_rtd_theme'
+    html_theme = "sphinx_rtd_theme"
