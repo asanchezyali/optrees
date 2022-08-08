@@ -1,3 +1,8 @@
+from typing import Union
+
+from optrees import Vertex
+
+
 class BasicEdge:
     def __init__(
         self, left_vertex, right_vertex, weight=None, orientation='-', label=None
@@ -5,7 +10,7 @@ class BasicEdge:
         self.__left_vertex = left_vertex
         self.__right_vertex = right_vertex
         self.__weight = weight
-        self.__orientation = self.validate_and_get_orientation(orientation)
+        self.__orientation = self.__validate_and_get_orientation(orientation)
         self.__label = (
             label
             if label
@@ -16,10 +21,11 @@ class BasicEdge:
             if orientation not in ['->', '<-']
             else (left_vertex if orientation == '->' else right_vertex)
         )
-        self.__end = (
-            None
-            if orientation not in ['->', '<-']
-            else (right_vertex if orientation == '->' else left_vertex)
+        self.__start = self.__get_start_vertex(
+            self.__orientation, self.__left_vertex, self.__right_vertex
+        )
+        self.__end = self.__get_end_vertex(
+            self.__orientation, self.__left_vertex, self.__right_vertex
         )
         left_vertex._BasicVertex__edges[self.label] = self
         right_vertex._BasicVertex__edges[self.label] = self
@@ -48,29 +54,47 @@ class BasicEdge:
         return False
 
     def __contains__(self, other):
-        from optrees.graph.vertex.vertex import Vertex
-
         if isinstance(other, Vertex):
             return other.label in [self.__left_vertex.label, self.__right_vertex.label]
         return False
 
     @staticmethod
-    def validate_and_get_orientation(orientation: str) -> bool:
+    def __validate_and_get_orientation(orientation: str) -> str:
         if orientation in ['->', '<-', '-']:
             return orientation
         else:
             raise ValueError('The orientation is not valid.')
+
+    @staticmethod
+    def __get_start_vertex(
+        orientation: str, left_vertex: Vertex, right_vertex: Vertex
+    ) -> Union[None, Vertex]:
+        return (
+            None
+            if orientation not in ['->', '<-']
+            else (left_vertex if orientation == '->' else right_vertex)
+        )
+
+    @staticmethod
+    def __get_end_vertex(
+        orientation: str, left_vertex: Vertex, right_vertex: Vertex
+    ) -> Union[None, Vertex]:
+        return (
+            None
+            if orientation not in ['->', '<-']
+            else (right_vertex if orientation == '->' else left_vertex)
+        )
 
     @property
     def label(self) -> str:
         return self.__label
 
     @property
-    def left_vertex(self) -> 'Vertex':
+    def left_vertex(self) -> Vertex:
         return self.__left_vertex
 
     @property
-    def right_vertex(self) -> 'Vertex':
+    def right_vertex(self) -> Vertex:
         return self.__right_vertex
 
     @property
@@ -87,14 +111,14 @@ class BasicEdge:
 
     @orientation.setter
     def orientation(self, orientation: str):
-        self.__orientation = self.validate_and_get_orientation(orientation)
+        self.__orientation = self.__validate_and_get_orientation(orientation)
 
     @property
-    def start(self) -> 'Vertex':
+    def start(self) -> Vertex:
         return self.__start
 
     @property
-    def end(self) -> 'Vertex':
+    def end(self) -> Vertex:
         return self.__end
 
 

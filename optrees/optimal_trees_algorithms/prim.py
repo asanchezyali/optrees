@@ -18,7 +18,7 @@ def prim(graph: Graph):
                         )
                     else:
                         bridge = True
-                    if (edge.weight < min_weight) and bridge:
+                    if edge.weight < min_weight and bridge:
                         min_weight = edge.weight
                         min_edge = edge
                 if min_edge is not None:

@@ -1,8 +1,8 @@
 class BasicVertex:
     def __init__(self, label: str):
         self.__label = label
-        self.__edges = dict()
-        self.__neighbors = dict()
+        self.__edges: dict = {}
+        self.__neighbors: dict = {}
 
     def __del__(self):
         print(f'Vertex {self.label} is deleted.')

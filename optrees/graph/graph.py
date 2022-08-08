@@ -2,15 +2,17 @@ from typing import List, Tuple
 
 from optrees.graph.edge.edge import Edge
 from optrees.graph.vertex.vertex import Vertex
+from optrees.helpers.lists import item_check_exists
 
 
 class BasicGraph:
     def __init__(self, label: str):
         self.__label = label
-        self.__vertices = dict()
-        self.__edges = dict()
+        self.__vertices: dict = {}
+        self.__edges: dict = {}
         self.__vertices_count = 0
         self.__edges_count = 0
+        self.__weight_sum = 0
 
     def __del__(self):
         print(f'Graph {self.label} is deleted.')
@@ -53,6 +55,10 @@ class BasicGraph:
     @property
     def edges_count(self) -> int:
         return self.__edges_count
+
+    @property
+    def weight_sum(self) -> int:
+        return self.__weight_sum
 
     def add_vertex(self, vertex: Vertex):
         if vertex.label in self.__vertices.keys():
@@ -106,48 +112,39 @@ class Graph(BasicGraph):
         super().__init__(label)
 
     @staticmethod
-    def get_edges_dicts_list(edges_tuples_list: List[Tuple]) -> dict:
-        edges_dicts = list()
+    def get_edges_dicts_list(
+        edges_tuples_list: List[Tuple[str, str, str, float, str]]
+    ) -> List[dict]:
+        edges_dicts = List()
         for edge_tuple in edges_tuples_list:
             if len(edge_tuple) <= 1 or len(edge_tuple) > 5:
                 raise ValueError(f'The edge tuple {edge_tuple} is invalid.')
-            if len(edge_tuple) == 2:
-                edges_dicts.append(
-                    {
-                        'left_vertex': Vertex(edge_tuple[0]),
-                        'right_vertex': Vertex(edge_tuple[1]),
-                    }
-                )
-            if len(edge_tuple) == 3:
-                edges_dicts.append(
-                    {
-                        'left_vertex': Vertex(edge_tuple[0]),
-                        'right_vertex': Vertex(edge_tuple[1]),
-                        'weight': edge_tuple[2],
-                    }
-                )
-            if len(edge_tuple) == 4:
-                edges_dicts.append(
-                    {
-                        'left_vertex': Vertex(edge_tuple[0]),
-                        'right_vertex': Vertex(edge_tuple[1]),
-                        'weight': edge_tuple[2],
-                        'orientation': edge_tuple[3],
-                    }
-                )
-            if len(edge_tuple) == 5:
-                edges_dicts.append(
-                    {
-                        'left_vertex': Vertex(edge_tuple[0]),
-                        'right_vertex': Vertex(edge_tuple[1]),
-                        'weight': edge_tuple[2],
-                        'orientation': edge_tuple[3],
-                        'label': edge_tuple[4],
-                    }
-                )
+            edges_dicts.append(
+                {
+                    'left_vertex': edge_tuple[0],
+                    'right_vertex': edge_tuple[1],
+                    'weight': edge_tuple[2] if item_check_exists(edge_tuple, 2) else 0,
+                    'orientation': edge_tuple[3]
+                    if item_check_exists(edge_tuple, 3)
+                    else '-',
+                    'label': edge_tuple[4]
+                    if item_check_exists(edge_tuple, 4)
+                    else None,
+                }
+            )
         return edges_dicts
 
     def from_list(self, edges_tuples: List[Tuple[str, str, str, float, str]]):
         edges_dicts = self.get_edges_dicts_list(edges_tuples)
         for edge_dict in edges_dicts:
+            if edge_dict.get('left_vertex') not in self.vertices.keys():
+                self.add_vertex(Vertex(edge_dict['left_vertex']))
+            if edge_dict.get('right_vertex') not in self.vertices.keys():
+                self.add_vertex(Vertex(edge_dict['right_vertex']))
+            edge_dict.update(
+                {
+                    'left_vertex': self.vertices[edge_dict['left_vertex']],
+                    'right_vertex': self.vertices[edge_dict['right_vertex']],
+                }
+            )
             self.add_edge(Edge(**edge_dict))

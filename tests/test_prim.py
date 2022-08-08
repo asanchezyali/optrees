@@ -102,7 +102,6 @@ def test_prim_with_disconnected_graph():
     try:
         prim(graph)
         check_exist_min_spanning_tree = True
-    # TODO: what is the execption that is reaised?
-    except:
+    except Exception:
         check_exist_min_spanning_tree = False
     assert check_exist_min_spanning_tree is False
