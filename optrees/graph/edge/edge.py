@@ -63,26 +63,26 @@ class BasicEdge:
         if orientation in ['->', '<-', '-']:
             return orientation
         else:
-            raise ValueError('The orientation is not valid.')
+            raise ValueError("The orientation is not valid.")
 
     @staticmethod
     def __get_start_vertex(
         orientation: str, left_vertex: Vertex, right_vertex: Vertex
-    ) -> Union[None, Vertex]:
+    ) -> Vertex:
         return (
             None
-            if orientation not in ['->', '<-']
-            else (left_vertex if orientation == '->' else right_vertex)
+            if orientation not in ["->", "<-"]
+            else (left_vertex if orientation == "->" else right_vertex)
         )
 
     @staticmethod
     def __get_end_vertex(
         orientation: str, left_vertex: Vertex, right_vertex: Vertex
-    ) -> Union[None, Vertex]:
+    ) -> Vertex:
         return (
             None
-            if orientation not in ['->', '<-']
-            else (right_vertex if orientation == '->' else left_vertex)
+            if orientation not in ["->", "<-"]
+            else (right_vertex if orientation == "->" else left_vertex)
         )
 
     @property

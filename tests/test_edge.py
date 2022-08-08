@@ -6,10 +6,10 @@ def test_default_initial_edge():
     vertex_b = Vertex('b')
     edge_ab = Edge(vertex_a, vertex_b)
     assert edge_ab.label == 'a - b'
-    assert edge_ab.weight is None
+    assert edge_ab.weight == None
     assert edge_ab.orientation == '-'
-    assert edge_ab.start is None
-    assert edge_ab.end is None
+    assert edge_ab.start == None
+    assert edge_ab.end == None
     assert edge_ab.left_vertex == vertex_a
     assert edge_ab.right_vertex == vertex_b
 
@@ -29,11 +29,9 @@ def test_label():
     edge_ab = Edge(Vertex('a'), Vertex('b'))
     assert edge_ab.label == 'a - b'
 
-
 def test_repr():
     edge_ab = Edge(Vertex('a'), Vertex('b'))
     assert edge_ab.__repr__() == f'Edge({edge_ab.label})'
-
 
 def test_eq():
     vertex_a = Vertex('a')
@@ -98,10 +96,9 @@ def test_orientation():
     edge_ab_negative = Edge(vertex_a, vertex_b, orientation='<-')
     assert edge_ab_negative.orientation == '<-'
 
-
 def test_setter_orientation():
-    vertex_a = Vertex('a')
-    vertex_b = Vertex('b')
+    vertex_a = Vertex("a")
+    vertex_b = Vertex("b")
     edge_ab = Edge(vertex_a, vertex_b)
     edge_ab.orientation = '->'
     assert edge_ab.orientation == '->'

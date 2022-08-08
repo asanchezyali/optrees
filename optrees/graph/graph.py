@@ -15,7 +15,7 @@ class BasicGraph:
         self.__weight_sum = 0
 
     def __del__(self):
-        print(f'Graph {self.label} is deleted.')
+        print(f"Graph {self.label} is deleted.")
 
     def __repr__(self) -> str:
         return f'{self.__class__.__name__}({self.__label})'
@@ -65,8 +65,8 @@ class BasicGraph:
             raise ValueError('The vertex is already in the graph.')
         self.__vertices[vertex.label] = vertex
         self.__vertices_count += 1
-
-    def add_vertices(self, vertices: List[Vertex]):
+    
+    def add_vertices(self, vertices: list[Vertex]):
         for vertex in vertices:
             self.add_vertex(vertex)
 
@@ -79,8 +79,9 @@ class BasicGraph:
             self.add_vertex(edge.right_vertex)
         self.__edges[edge.label] = edge
         self.__edges_count += 1
+        self.__weight_sum += edge.weight
 
-    def add_edges(self, edges: List[Edge]):
+    def add_edges(self, edges: list[Edge]):
         for edge in edges:
             self.add_edge(edge)
 
