@@ -1,7 +1,6 @@
 from typing import List, Tuple
 
-from optrees.graph.edge.edge import Edge
-from optrees.graph.vertex.vertex import Vertex
+from optrees.graph.basic_objects import Edge, Vertex
 from optrees.helpers.lists import item_check_exists
 
 
