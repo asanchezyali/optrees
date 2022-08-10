@@ -2,8 +2,8 @@ from optrees import Edge, Graph, Vertex
 
 
 def test_default_initial_graph():
-    graph = Graph("G")
-    assert graph.label == "G"
+    graph = Graph('G')
+    assert graph.label == 'G'
     assert graph.vertices == dict()
     assert graph.edges == dict()
     assert graph.vertices_count == 0
@@ -11,7 +11,7 @@ def test_default_initial_graph():
 
 
 def test_delete_graph():
-    graph = Graph("G")
+    graph = Graph('G')
     del graph
     try:
         graph
@@ -22,22 +22,20 @@ def test_delete_graph():
 
 
 def test_repr():
-    graph = Graph("G")
-    assert graph.__repr__() == f"Graph({graph.label})"
-
+    graph = Graph('G')
+    assert graph.__repr__() == f'Graph({graph.label})'
 
 
 def test_label():
-    graph = Graph("G")
-    assert graph.label == "G"
-
+    graph = Graph('G')
+    assert graph.label == 'G'
 
 
 def test_add_vertex():
-    graph = Graph("G")
-    vertex_a = Vertex("a")
+    graph = Graph('G')
+    vertex_a = Vertex('a')
     graph.add_vertex(vertex_a)
-    assert graph.vertices == {"a": vertex_a}
+    assert graph.vertices == {'a': vertex_a}
     assert graph.vertices_count == 1
     try:
         graph.add_vertex(vertex_a)
@@ -48,11 +46,11 @@ def test_add_vertex():
 
 
 def test_add_vertices():
-    graph = Graph("G")
-    vertex_a = Vertex("a")
-    vertex_b = Vertex("b")
+    graph = Graph('G')
+    vertex_a = Vertex('a')
+    vertex_b = Vertex('b')
     graph.add_vertices([vertex_a, vertex_b])
-    assert graph.vertices == {"a": vertex_a, "b": vertex_b}
+    assert graph.vertices == {'a': vertex_a, 'b': vertex_b}
     assert graph.vertices_count == 2
     try:
         graph.add_vertices([vertex_a, vertex_b])
@@ -63,12 +61,12 @@ def test_add_vertices():
 
 
 def test_add_edge():
-    graph = Graph("G")
-    vertex_a = Vertex("a")
-    vertex_b = Vertex("b")
+    graph = Graph('G')
+    vertex_a = Vertex('a')
+    vertex_b = Vertex('b')
     edge_ab = Edge(vertex_a, vertex_b)
     graph.add_edge(edge_ab)
-    assert graph.edges == {"a - b": edge_ab}
+    assert graph.edges == {'a - b': edge_ab}
     assert graph.edges_count == 1
     try:
         graph.add_edge(edge_ab)
@@ -79,14 +77,14 @@ def test_add_edge():
 
 
 def test_add_edges():
-    graph = Graph("G")
-    vertex_a = Vertex("a")
-    vertex_b = Vertex("b")
-    vertex_c = Vertex("c")
+    graph = Graph('G')
+    vertex_a = Vertex('a')
+    vertex_b = Vertex('b')
+    vertex_c = Vertex('c')
     edge_ab = Edge(vertex_a, vertex_b)
     edge_bc = Edge(vertex_b, vertex_c)
     graph.add_edges([edge_ab, edge_bc])
-    assert graph.edges == {"a - b": edge_ab, "b - c": edge_bc}
+    assert graph.edges == {'a - b': edge_ab, 'b - c': edge_bc}
     assert graph.edges_count == 2
     try:
         graph.add_edges([edge_ab, edge_bc])
@@ -97,15 +95,15 @@ def test_add_edges():
 
 
 def remove_vertex():
-    graph = Graph("G")
-    vertex_a = Vertex("a")
-    vertex_b = Vertex("b")
-    vertex_c = Vertex("c")
+    graph = Graph('G')
+    vertex_a = Vertex('a')
+    vertex_b = Vertex('b')
+    vertex_c = Vertex('c')
     edge_ab = Edge(vertex_a, vertex_b)
     edge_bc = Edge(vertex_b, vertex_c)
     graph.add_edges([edge_ab, edge_bc])
     graph.remove_vertex(vertex_b)
-    assert graph.vertices == {"a": vertex_a, "c": vertex_c}
+    assert graph.vertices == {'a': vertex_a, 'c': vertex_c}
     assert graph.vertices_count == 2
     try:
         graph.remove_vertex(vertex_b)
@@ -116,15 +114,15 @@ def remove_vertex():
 
 
 def remove_vertices():
-    graph = Graph("G")
-    vertex_a = Vertex("a")
-    vertex_b = Vertex("b")
-    vertex_c = Vertex("c")
+    graph = Graph('G')
+    vertex_a = Vertex('a')
+    vertex_b = Vertex('b')
+    vertex_c = Vertex('c')
     edge_ab = Edge(vertex_a, vertex_b)
     edge_bc = Edge(vertex_b, vertex_c)
     graph.add_edges([edge_ab, edge_bc])
     graph.remove_vertices([vertex_b, vertex_c])
-    assert graph.vertices == {"a": vertex_a}
+    assert graph.vertices == {'a': vertex_a}
     assert graph.vertices_count == 1
     try:
         graph.remove_vertices([vertex_b, vertex_c])
@@ -135,15 +133,15 @@ def remove_vertices():
 
 
 def remove_edge():
-    graph = Graph("G")
-    vertex_a = Vertex("a")
-    vertex_b = Vertex("b")
-    vertex_c = Vertex("c")
+    graph = Graph('G')
+    vertex_a = Vertex('a')
+    vertex_b = Vertex('b')
+    vertex_c = Vertex('c')
     edge_ab = Edge(vertex_a, vertex_b)
     edge_bc = Edge(vertex_b, vertex_c)
     graph.add_edges([edge_ab, edge_bc])
     graph.remove_edge(edge_bc)
-    assert graph.edges == {"a - b": edge_ab}
+    assert graph.edges == {'a - b': edge_ab}
     assert graph.edges_count == 1
     try:
         graph.remove_edge(edge_bc)
@@ -154,10 +152,10 @@ def remove_edge():
 
 
 def remove_edges():
-    graph = Graph("G")
-    vertex_a = Vertex("a")
-    vertex_b = Vertex("b")
-    vertex_c = Vertex("c")
+    graph = Graph('G')
+    vertex_a = Vertex('a')
+    vertex_b = Vertex('b')
+    vertex_c = Vertex('c')
     edge_ab = Edge(vertex_a, vertex_b)
     edge_bc = Edge(vertex_b, vertex_c)
     graph.add_edges([edge_ab, edge_bc])
@@ -173,8 +171,8 @@ def remove_edges():
 
 
 def test_from_list():
-    graph = Graph("G")
-    edges_tuples = [("a", "b"), ("b", "c"), ("c", "a")]
+    graph = Graph('G')
+    edges_tuples = [('a', 'b'), ('b', 'c'), ('c', 'a')]
     graph.from_list(edges_tuples)
     assert graph.edges_count == 3
     assert graph.vertices_count == 3

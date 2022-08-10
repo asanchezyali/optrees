@@ -5,7 +5,7 @@ from optrees import Vertex
 
 class BasicEdge:
     def __init__(
-        self, left_vertex, right_vertex, weight=None, orientation='-', label=None
+        self, left_vertex, right_vertex, weight=0.0, orientation='-', label=None
     ):
         self.__left_vertex = left_vertex
         self.__right_vertex = right_vertex
@@ -63,26 +63,26 @@ class BasicEdge:
         if orientation in ['->', '<-', '-']:
             return orientation
         else:
-            raise ValueError("The orientation is not valid.")
+            raise ValueError('The orientation is not valid.')
 
     @staticmethod
     def __get_start_vertex(
         orientation: str, left_vertex: Vertex, right_vertex: Vertex
-    ) -> Vertex:
+    ) -> Union[None, Vertex]:
         return (
             None
-            if orientation not in ["->", "<-"]
-            else (left_vertex if orientation == "->" else right_vertex)
+            if orientation not in ['->', '<-']
+            else (left_vertex if orientation == '->' else right_vertex)
         )
 
     @staticmethod
     def __get_end_vertex(
         orientation: str, left_vertex: Vertex, right_vertex: Vertex
-    ) -> Vertex:
+    ) -> Union[None, Vertex]:
         return (
             None
-            if orientation not in ["->", "<-"]
-            else (right_vertex if orientation == "->" else left_vertex)
+            if orientation not in ['->', '<-']
+            else (right_vertex if orientation == '->' else left_vertex)
         )
 
     @property
@@ -124,6 +124,6 @@ class BasicEdge:
 
 class Edge(BasicEdge):
     def __init__(
-        self, left_vertex, right_vertex, weight=None, orientation='-', label=None
+        self, left_vertex, right_vertex, weight=0.0, orientation='-', label=None
     ):
         super().__init__(left_vertex, right_vertex, weight, orientation, label)

@@ -9,7 +9,7 @@ def test_prim_with_connected_graph():
         ('b', 'd', 4),
         ('c', 'd', 5),
         ('c', 'e', 6),
-        ('d', 'e', 7),    
+        ('d', 'e', 7),
         ('d', 'f', 8),
         ('e', 'f', 9),
         ('e', 'g', 10),
@@ -33,7 +33,7 @@ def test_prim_with_connected_graph():
         ('n', 'p', 28),
         ('o', 'p', 29),
         ('o', 'q', 30),
-        ('p', 'q', 31)
+        ('p', 'q', 31),
     ]
     mst_graph_tuples_list = [
         ('a', 'b', 1),
@@ -51,7 +51,7 @@ def test_prim_with_connected_graph():
         ('l', 'n', 24),
         ('m', 'o', 26),
         ('n', 'p', 28),
-        ('o', 'q', 30)
+        ('o', 'q', 30),
     ]
     graph = Graph('G')
     graph.from_list(graph_tuples_list)
@@ -71,7 +71,7 @@ def test_prim_with_disconnected_graph():
         ('b', 'd', 4),
         ('c', 'd', 5),
         ('c', 'e', 6),
-        ('d', 'e', 7),    
+        ('d', 'e', 7),
         ('d', 'f', 8),
         ('e', 'f', 9),
         ('e', 'g', 10),
@@ -95,7 +95,7 @@ def test_prim_with_disconnected_graph():
         ('n', 'p', 28),
         ('o', 'p', 29),
         ('o', 'q', 30),
-        ('r', 's', 31)
+        ('r', 's', 31),
     ]
     graph = Graph('G')
     graph.from_list(graph_tuples_list)

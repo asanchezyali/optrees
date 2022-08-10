@@ -28,6 +28,7 @@ def test_repr():
     vertex_a = Vertex('a')
     assert vertex_a.__repr__() == f'Vertex({vertex_a.label})'
 
+
 def test_eq():
     vertex_a = Vertex('a')
     vertex_b = Vertex('a')
@@ -38,12 +39,14 @@ def test_label():
     vertex_a = Vertex('a')
     assert vertex_a.label == 'a'
 
+
 def test_add_neighbor():
     vertex_a = Vertex('a')
     vertex_b = Vertex('b')
     vertex_a.add_neighbor(vertex_b)
     assert vertex_a.neighbors == {'b': vertex_b}
     assert vertex_b.neighbors == {'a': vertex_a}
+
 
 def test_amount_of_neighbors():
     vertex_a = Vertex('a')

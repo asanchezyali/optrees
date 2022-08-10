@@ -1,16 +1,10 @@
-from optrees.graph.edge.edge import Edge
-from optrees.graph.graph import BasicGraph, Graph
-from optrees.graph.vertex.vertex import BasicVertex, Vertex
-from optrees.optimal_trees_algorithms.kruskal import kruskal
-from optrees.optimal_trees_algorithms.prim import prim
-from optrees.version import __version__
+# flake8: noqa
 
-__all__ = [
-    'Edge',
-    'BasicVertex',
-    'Vertex',
-    'BasicGraph',
-    'Graph',
-    'kruskal',
-    'prim',
-]
+from .graph.edge.edge import Edge
+from .graph.graph import Graph
+from .graph.vertex.vertex import Vertex
+from .optimal_trees_algorithms.kruskal import kruskal
+from .optimal_trees_algorithms.prim import prim
+from .version import __version__
+
+__all__ = ['Vertex', 'Edge', 'Graph', 'prim', 'kruskal']
