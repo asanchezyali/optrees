@@ -1,8 +1,9 @@
 # flake8: noqa
 
+from .graph.basic_objects import Edge, Vertex
+from .graph.graph import Graph
+from .optimal_trees_algorithms.kruskal import kruskal
+from .optimal_trees_algorithms.prim import prim
 from .version import __version__
 
-from .graph.vertex.vertex import *
-from .graph.edge.edge import *
-from .graph.graph import *
-from .optimal_trees_algorithms.prim import *
+__all__ = ['Vertex', 'Edge', 'Graph', 'prim', 'kruskal']

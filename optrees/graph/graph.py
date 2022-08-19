@@ -1,23 +1,23 @@
-from typing import Tuple
+from typing import List, Tuple
 
-from optrees import Edge, Vertex
+from optrees.graph.basic_objects import Edge, Vertex
 from optrees.helpers.lists import item_check_exists
 
 
 class BasicGraph:
     def __init__(self, label: str):
         self.__label = label
-        self.__vertices = dict()
-        self.__edges = dict()
+        self.__vertices: dict = {}
+        self.__edges: dict = {}
         self.__vertices_count = 0
         self.__edges_count = 0
-        self.__weight_sum = 0
+        self.__weight_sum = 0.0
 
     def __del__(self):
-        print(f"Graph {self.label} is deleted.")
+        print(f'Graph {self.label} is deleted.')
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({self.__label})"
+        return f'{self.__class__.__name__}({self.__label})'
 
     def __eq__(self, other):
         if isinstance(other, BasicGraph):
@@ -56,22 +56,22 @@ class BasicGraph:
         return self.__edges_count
 
     @property
-    def weight_sum(self) -> int:
+    def weight_sum(self) -> float:
         return self.__weight_sum
 
     def add_vertex(self, vertex: Vertex):
         if vertex.label in self.__vertices.keys():
-            raise ValueError("The vertex is already in the graph.")
+            raise ValueError('The vertex is already in the graph.')
         self.__vertices[vertex.label] = vertex
         self.__vertices_count += 1
 
-    def add_vertices(self, vertices: list[Vertex]):
+    def add_vertices(self, vertices: List[Vertex]):
         for vertex in vertices:
             self.add_vertex(vertex)
 
     def add_edge(self, edge: Edge):
         if edge.label in self.__edges.keys():
-            raise ValueError("The edge is already in the graph.")
+            raise ValueError('The edge is already in the graph.')
         if edge.left_vertex.label not in self.__vertices.keys():
             self.add_vertex(edge.left_vertex)
         if edge.right_vertex.label not in self.__vertices.keys():
@@ -80,29 +80,28 @@ class BasicGraph:
         self.__edges_count += 1
         self.__weight_sum += edge.weight
 
-    def add_edges(self, edges: list[Edge]):
+    def add_edges(self, edges: List[Edge]):
         for edge in edges:
             self.add_edge(edge)
 
     def remove_vertex(self, vertex: Vertex):
         if vertex.label not in self.__vertices.keys():
-            raise ValueError("The vertex is not in the graph.")
+            raise ValueError('The vertex is not in the graph.')
         for edge in vertex.edges.values():
             self.remove_edge(edge)
         del self.__vertices[vertex.label]
         self.__vertices_count -= 1
 
-    def remove_vertices(self, vertices: list[Vertex]):
+    def remove_vertices(self, vertices: List[Vertex]):
         for vertex in vertices:
             self.remove_vertex(vertex)
 
     def remove_edge(self, edge: Edge):
         if edge.label not in self.__edges.keys():
-            raise ValueError("The edge is not in the graph.")
+            raise ValueError('The edge is not in the graph.')
         del self.__edges[edge.label]
-        self.__edges_count -= 1
 
-    def remove_edges(self, edges: list[Edge]):
+    def remove_edges(self, edges: List[Edge]):
         for edge in edges:
             self.remove_edge(edge)
 
@@ -112,37 +111,39 @@ class Graph(BasicGraph):
         super().__init__(label)
 
     @staticmethod
-    def get_edges_dicts_list(edges_tuples_list: list[Tuple]) -> dict:
+    def get_edges_dicts_list(
+        edges_tuples_list: List[Tuple[str, str, str, float, str]]
+    ) -> List[dict]:
         edges_dicts = list()
         for edge_tuple in edges_tuples_list:
             if len(edge_tuple) <= 1 or len(edge_tuple) > 5:
-                raise ValueError(f"The edge tuple {edge_tuple} is invalid.")
+                raise ValueError(f'The edge tuple {edge_tuple} is invalid.')
             edges_dicts.append(
                 {
-                    "left_vertex": edge_tuple[0],
-                    "right_vertex": edge_tuple[1],
-                    "weight": edge_tuple[2] if item_check_exists(edge_tuple, 2) else 0,
-                    "orientation": edge_tuple[3]
+                    'left_vertex': edge_tuple[0],
+                    'right_vertex': edge_tuple[1],
+                    'weight': edge_tuple[2] if item_check_exists(edge_tuple, 2) else 0,
+                    'orientation': edge_tuple[3]
                     if item_check_exists(edge_tuple, 3)
-                    else "-",
-                    "label": edge_tuple[4]
+                    else '-',
+                    'label': edge_tuple[4]
                     if item_check_exists(edge_tuple, 4)
                     else None,
                 }
             )
         return edges_dicts
 
-    def from_list(self, edges_tuples: list[Tuple[str, str, str, float, str]]):
+    def from_list(self, edges_tuples: List[Tuple[str, str, str, float, str]]):
         edges_dicts = self.get_edges_dicts_list(edges_tuples)
         for edge_dict in edges_dicts:
-            if edge_dict.get("left_vertex") not in self.vertices.keys():
-                self.add_vertex(Vertex(edge_dict["left_vertex"]))
-            if edge_dict.get("right_vertex") not in self.vertices.keys():
-                self.add_vertex(Vertex(edge_dict["right_vertex"]))
+            if edge_dict.get('left_vertex') not in self.vertices.keys():
+                self.add_vertex(Vertex(edge_dict['left_vertex']))
+            if edge_dict.get('right_vertex') not in self.vertices.keys():
+                self.add_vertex(Vertex(edge_dict['right_vertex']))
             edge_dict.update(
                 {
-                    "left_vertex": self.vertices[edge_dict["left_vertex"]],
-                    "right_vertex": self.vertices[edge_dict["right_vertex"]],
+                    'left_vertex': self.vertices[edge_dict['left_vertex']],
+                    'right_vertex': self.vertices[edge_dict['right_vertex']],
                 }
             )
             self.add_edge(Edge(**edge_dict))
