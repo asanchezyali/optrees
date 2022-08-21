@@ -147,3 +147,42 @@ class Graph(BasicGraph):
                 }
             )
             self.add_edge(Edge(**edge_dict))
+
+
+class GraphReader:
+    def __init__(self, file_path: str):
+        self.__file_path = file_path
+
+    def read(self) -> Graph:
+        with open(self.__file_path) as file:
+            lines = file.readlines()
+            graph = Graph(lines[0].strip())
+            for line in lines[1:]:
+                edge_tuple = line.strip().split()
+                if len(edge_tuple) <= 1 or len(edge_tuple) > 5:
+                    raise ValueError(f'The edge tuple {edge_tuple} is invalid.')
+                if edge_tuple[0] not in graph.vertices.keys():
+                    graph.add_vertex(Vertex(edge_tuple[0]))
+                if edge_tuple[1] not in graph.vertices.keys():
+                    graph.add_vertex(Vertex(edge_tuple[1]))
+                edge_dict = {
+                    'left_vertex': graph.vertices[edge_tuple[0]],
+                    'right_vertex': graph.vertices[edge_tuple[1]],
+                    'weight': edge_tuple[2] if item_check_exists(edge_tuple, 2) else 0,
+                    'orientation': edge_tuple[3]
+                    if item_check_exists(edge_tuple, 3)
+                    else '-',
+                    'label': edge_tuple[4]
+                    if item_check_exists(edge_tuple, 4)
+                    else None,
+                }
+                graph.add_edge(Edge(**edge_dict))
+        return graph
+
+    def write(self, graph: Graph):
+        with open(self.__file_path, 'w') as file:
+            file.write(f'{graph.label}\n')
+            for edge in graph.edges.values():
+                file.write(
+                    f'{edge.left_vertex.label} {edge.right_vertex.label} {edge.weight} {edge.orientation} {edge.label}\n'
+                )
