@@ -29,9 +29,7 @@ def test_kruskal_graph_1():
     min_spanning_forest = kruskal(graph)
     assert min_spanning_forest.vertices_count == mst_graph.vertices_count
     assert min_spanning_forest.edges_count == mst_graph.edges_count
-    assert sum(edge.weight for edge in min_spanning_forest.edges.values()) == sum(
-        edge.weight for edge in mst_graph.edges.values()
-    )
+    assert min_spanning_forest.weight_sum == mst_graph.weight_sum
 
 
 def test_kruskal_graph_2():
