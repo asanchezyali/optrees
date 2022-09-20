@@ -8,17 +8,20 @@ def prim(graph: Graph):
     while mst_graph.vertices_count < graph.vertices_count:
         for vertex in graph.vertices.values():
             if vertex not in mst_graph:
-                min_weight = np.infty
+                min_weight = np.Infinity
                 min_edge = None
                 for edge in vertex.edges.values():
                     if mst_graph.vertices_count > 0:
-                        bridge = (
+                        is_the_vertex_connected_to_mst_graph = (
                             edge.right_vertex in mst_graph
                             or edge.left_vertex in mst_graph
                         )
                     else:
-                        bridge = True
-                    if edge.weight < min_weight and bridge:
+                        is_the_vertex_connected_to_mst_graph = True
+                    if (
+                        edge.weight < min_weight
+                        and is_the_vertex_connected_to_mst_graph
+                    ):
                         min_weight = edge.weight
                         min_edge = edge
                 if min_edge is not None:

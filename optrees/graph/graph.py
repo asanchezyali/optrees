@@ -114,20 +114,23 @@ class Graph(BasicGraph):
     def get_edges_dicts_list(
         edges_tuples_list: List[Tuple[str, str, str, float, str]]
     ) -> List[dict]:
+        left_vertex, right_vertex, weight, orientation, label = range(5)
         edges_dicts = list()
         for edge_tuple in edges_tuples_list:
             if len(edge_tuple) <= 1 or len(edge_tuple) > 5:
                 raise ValueError(f'The edge tuple {edge_tuple} is invalid.')
             edges_dicts.append(
                 {
-                    'left_vertex': edge_tuple[0],
-                    'right_vertex': edge_tuple[1],
-                    'weight': edge_tuple[2] if item_check_exists(edge_tuple, 2) else 0,
-                    'orientation': edge_tuple[3]
-                    if item_check_exists(edge_tuple, 3)
+                    'left_vertex': edge_tuple[left_vertex],
+                    'right_vertex': edge_tuple[right_vertex],
+                    'weight': edge_tuple[weight]
+                    if item_check_exists(edge_tuple, weight)
+                    else 0,
+                    'orientation': edge_tuple[orientation]
+                    if item_check_exists(edge_tuple, orientation)
                     else '-',
-                    'label': edge_tuple[4]
-                    if item_check_exists(edge_tuple, 4)
+                    'label': edge_tuple[label]
+                    if item_check_exists(edge_tuple, label)
                     else None,
                 }
             )
@@ -148,32 +151,40 @@ class Graph(BasicGraph):
             )
             self.add_edge(Edge(**edge_dict))
 
+    def adjacency_matrix(self) -> List[List[float]]:
+        pass
+
 
 class GraphReader:
     def __init__(self, file_path: str):
         self.__file_path = file_path
 
     def read(self) -> Graph:
+        read_graph_label = 0
+        read_graph_vertices = 1
+        left_vertex, right_vertex, weight, orientation, label = range(5)
         with open(self.__file_path) as file:
             lines = file.readlines()
-            graph = Graph(lines[0].strip())
-            for line in lines[1:]:
+            graph = Graph(lines[read_graph_label].strip())
+            for line in lines[read_graph_vertices:]:
                 edge_tuple = line.strip().split()
                 if len(edge_tuple) <= 1 or len(edge_tuple) > 5:
                     raise ValueError(f'The edge tuple {edge_tuple} is invalid.')
-                if edge_tuple[0] not in graph.vertices.keys():
-                    graph.add_vertex(Vertex(edge_tuple[0]))
-                if edge_tuple[1] not in graph.vertices.keys():
-                    graph.add_vertex(Vertex(edge_tuple[1]))
+                if edge_tuple[left_vertex] not in graph.vertices.keys():
+                    graph.add_vertex(Vertex(edge_tuple[left_vertex]))
+                if edge_tuple[right_vertex] not in graph.vertices.keys():
+                    graph.add_vertex(Vertex(edge_tuple[right_vertex]))
                 edge_dict = {
-                    'left_vertex': graph.vertices[edge_tuple[0]],
-                    'right_vertex': graph.vertices[edge_tuple[1]],
-                    'weight': edge_tuple[2] if item_check_exists(edge_tuple, 2) else 0,
-                    'orientation': edge_tuple[3]
-                    if item_check_exists(edge_tuple, 3)
+                    'left_vertex': graph.vertices[edge_tuple[left_vertex]],
+                    'right_vertex': graph.vertices[edge_tuple[right_vertex]],
+                    'weight': edge_tuple[weight]
+                    if item_check_exists(edge_tuple, weight)
+                    else 0,
+                    'orientation': edge_tuple[orientation]
+                    if item_check_exists(edge_tuple, orientation)
                     else '-',
-                    'label': edge_tuple[4]
-                    if item_check_exists(edge_tuple, 4)
+                    'label': edge_tuple[label]
+                    if item_check_exists(edge_tuple, label)
                     else None,
                 }
                 graph.add_edge(Edge(**edge_dict))
