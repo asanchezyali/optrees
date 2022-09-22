@@ -2,8 +2,9 @@
 
 from .graph.basic_objects import Edge, Vertex
 from .graph.graph import Graph
+from .optimal_trees_algorithms.boruvka import boruvka
 from .optimal_trees_algorithms.kruskal import kruskal
 from .optimal_trees_algorithms.prim import prim
 from .version import __version__
 
-__all__ = ['Vertex', 'Edge', 'Graph', 'prim', 'kruskal']
+__all__ = ['Vertex', 'Edge', 'Graph', 'prim', 'kruskal', 'boruvka']
