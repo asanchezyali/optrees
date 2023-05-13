@@ -1,8 +1,8 @@
 from optrees import Graph
 
-from .boruvka import boruvka
-from .kruskal import kruskal
-from .prim import prim
+from .optimal_trees_algorithms.boruvka import boruvka
+from .optimal_trees_algorithms.kruskal import kruskal
+from .optimal_trees_algorithms.prim import prim
 
 
 def getMinimumSpanningTree(graph: Graph, algorithm: str = "boruvka"):
