@@ -5,7 +5,7 @@ from .optimal_trees_algorithms.kruskal import kruskal
 from .optimal_trees_algorithms.prim import prim
 
 
-def getMinimumSpanningTree(graph: Graph, algorithm: str = "boruvka"):
+def get_minimum_spanning_tree(graph: Graph, algorithm: str = "boruvka"):
     algorithms = {
         "boruvka": boruvka,
         "kruskal": kruskal,
