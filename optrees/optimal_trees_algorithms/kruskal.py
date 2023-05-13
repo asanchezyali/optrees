@@ -2,7 +2,7 @@ from optrees import Graph
 
 
 def kruskal(graph: Graph):
-    mst_graph = Graph('MSF')
+    mst_graph = Graph("MSF")
     components = {vertex: {vertex} for vertex in graph.vertices}
     edges = sorted(
         graph.edges.values(),

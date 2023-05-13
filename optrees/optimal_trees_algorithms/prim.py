@@ -4,7 +4,7 @@ from optrees import Graph
 
 
 def prim(graph: Graph):
-    mst_graph = Graph('MST')
+    mst_graph = Graph("MST")
     while mst_graph.vertices_count < graph.vertices_count:
         for vertex in graph.vertices.values():
             if vertex not in mst_graph:
@@ -27,5 +27,5 @@ def prim(graph: Graph):
                 if min_edge is not None:
                     mst_graph.add_edge(min_edge)
                 else:
-                    raise ValueError('The graph is not connected.')
+                    raise ValueError("The graph is not connected.")
     return mst_graph

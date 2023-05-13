@@ -7,4 +7,12 @@ from .optimal_trees_algorithms.kruskal import kruskal
 from .optimal_trees_algorithms.prim import prim
 from .version import __version__
 
-__all__ = ['Vertex', 'Edge', 'Graph', 'prim', 'kruskal', 'boruvka']
+__all__ = [
+    "Vertex",
+    "Edge",
+    "Graph",
+    "boruvka",
+    "getMinimumSpanningTree",
+    "kruskal",
+    "prim",
+]
