@@ -4,7 +4,7 @@ from optrees import Graph
 
 
 def boruvka(graph: Graph):
-    mst_graph = Graph('MST')
+    mst_graph = Graph("MST")
     components = {vertex: {vertex} for vertex in graph.vertices}
     while mst_graph.vertices_count < graph.vertices_count:
         min_edges = {}

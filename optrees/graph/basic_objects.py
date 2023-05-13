@@ -8,13 +8,13 @@ class BasicVertex:
         self.__neighbors: dict = {}
 
     def __del__(self):
-        print(f'Vertex {self.label} is deleted.')
+        print(f"Vertex {self.label} is deleted.")
 
     def __str__(self):
         return self.__label
 
     def __repr__(self):
-        return f'{self.__class__.__name__}({self.__label})'
+        return f"{self.__class__.__name__}({self.__label})"
 
     def __eq__(self, other):
         if isinstance(other, BasicVertex):
@@ -36,9 +36,9 @@ class BasicVertex:
     def neighbors(self) -> dict:
         return self.__neighbors
 
-    def add_neighbor(self, vertex, weight=None, orientation='-'):
+    def add_neighbor(self, vertex, weight=None, orientation="-"):
         if not isinstance(vertex, BasicVertex):
-            raise TypeError('The vertex is not valid.')
+            raise TypeError("The vertex is not valid.")
         same_vertex = self is vertex
         already_neighbor = (
             vertex.label in self.__neighbors.keys()
@@ -48,7 +48,7 @@ class BasicVertex:
             self.__neighbors[vertex.label] = vertex
             vertex.__neighbors[self.label] = self
             edge = Edge(
-                label=f'{self.label} {orientation} {vertex.label}',
+                label=f"{self.label} {orientation} {vertex.label}",
                 left_vertex=self,
                 right_vertex=vertex,
                 weight=weight,
@@ -57,7 +57,7 @@ class BasicVertex:
             self.__edges[edge.label] = edge
             vertex.__edges[edge.label] = edge
         else:
-            raise ValueError('The vertex is already a neighbor.')
+            raise ValueError("The vertex is already a neighbor.")
 
 
 class Vertex(BasicVertex):
@@ -76,7 +76,7 @@ class Vertex(BasicVertex):
 
 class BasicEdge:
     def __init__(
-        self, left_vertex, right_vertex, weight=0.0, orientation='-', label=None
+        self, left_vertex, right_vertex, weight=0.0, orientation="-", label=None
     ):
         self.__left_vertex = left_vertex
         self.__right_vertex = right_vertex
@@ -85,12 +85,12 @@ class BasicEdge:
         self.__label = (
             label
             if label
-            else f'{left_vertex.label} {orientation} {right_vertex.label}'
+            else f"{left_vertex.label} {orientation} {right_vertex.label}"
         )
         self.__start = (
             None
-            if orientation not in ['->', '<-']
-            else (left_vertex if orientation == '->' else right_vertex)
+            if orientation not in ["->", "<-"]
+            else (left_vertex if orientation == "->" else right_vertex)
         )
         self.__start = self.__get_start_vertex(
             self.__orientation, self.__left_vertex, self.__right_vertex
@@ -102,13 +102,13 @@ class BasicEdge:
         right_vertex._BasicVertex__edges[self.label] = self
 
     def __del__(self):
-        print(f'Edge {self.label} is deleted.')
+        print(f"Edge {self.label} is deleted.")
 
     def __str__(self) -> str:
         return self.__label
 
     def __repr__(self) -> str:
-        return f'{self.__class__.__name__}({self.__label})'
+        return f"{self.__class__.__name__}({self.__label})"
 
     def __eq__(self, other):
         if isinstance(other, BasicEdge):
@@ -131,10 +131,10 @@ class BasicEdge:
 
     @staticmethod
     def __validate_and_get_orientation(orientation: str) -> str:
-        if orientation in ['->', '<-', '-']:
+        if orientation in ["->", "<-", "-"]:
             return orientation
         else:
-            raise ValueError('The orientation is not valid.')
+            raise ValueError("The orientation is not valid.")
 
     @staticmethod
     def __get_start_vertex(
@@ -142,8 +142,8 @@ class BasicEdge:
     ) -> Union[None, Vertex]:
         return (
             None
-            if orientation not in ['->', '<-']
-            else (left_vertex if orientation == '->' else right_vertex)
+            if orientation not in ["->", "<-"]
+            else (left_vertex if orientation == "->" else right_vertex)
         )
 
     @staticmethod
@@ -152,8 +152,8 @@ class BasicEdge:
     ) -> Union[None, Vertex]:
         return (
             None
-            if orientation not in ['->', '<-']
-            else (right_vertex if orientation == '->' else left_vertex)
+            if orientation not in ["->", "<-"]
+            else (right_vertex if orientation == "->" else left_vertex)
         )
 
     @property
@@ -195,6 +195,6 @@ class BasicEdge:
 
 class Edge(BasicEdge):
     def __init__(
-        self, left_vertex, right_vertex, weight=0.0, orientation='-', label=None
+        self, left_vertex, right_vertex, weight=0.0, orientation="-", label=None
     ):
         super().__init__(left_vertex, right_vertex, weight, orientation, label)

@@ -14,10 +14,10 @@ class BasicGraph:
         self.__weight_sum = 0.0
 
     def __del__(self):
-        print(f'Graph {self.label} is deleted.')
+        print(f"Graph {self.label} is deleted.")
 
     def __repr__(self) -> str:
-        return f'{self.__class__.__name__}({self.__label})'
+        return f"{self.__class__.__name__}({self.__label})"
 
     def __eq__(self, other):
         if isinstance(other, BasicGraph):
@@ -61,7 +61,7 @@ class BasicGraph:
 
     def add_vertex(self, vertex: Vertex):
         if vertex.label in self.__vertices.keys():
-            raise ValueError('The vertex is already in the graph.')
+            raise ValueError("The vertex is already in the graph.")
         self.__vertices[vertex.label] = vertex
         self.__vertices_count += 1
 
@@ -71,7 +71,7 @@ class BasicGraph:
 
     def add_edge(self, edge: Edge):
         if edge.label in self.__edges.keys():
-            raise ValueError('The edge is already in the graph.')
+            raise ValueError("The edge is already in the graph.")
         if edge.left_vertex.label not in self.__vertices.keys():
             self.add_vertex(edge.left_vertex)
         if edge.right_vertex.label not in self.__vertices.keys():
@@ -86,7 +86,7 @@ class BasicGraph:
 
     def remove_vertex(self, vertex: Vertex):
         if vertex.label not in self.__vertices.keys():
-            raise ValueError('The vertex is not in the graph.')
+            raise ValueError("The vertex is not in the graph.")
         for edge in vertex.edges.values():
             self.remove_edge(edge)
         del self.__vertices[vertex.label]
@@ -98,7 +98,7 @@ class BasicGraph:
 
     def remove_edge(self, edge: Edge):
         if edge.label not in self.__edges.keys():
-            raise ValueError('The edge is not in the graph.')
+            raise ValueError("The edge is not in the graph.")
         del self.__edges[edge.label]
 
     def remove_edges(self, edges: List[Edge]):
@@ -118,18 +118,18 @@ class Graph(BasicGraph):
         edges_dicts = list()
         for edge_tuple in edges_tuples_list:
             if len(edge_tuple) <= 1 or len(edge_tuple) > 5:
-                raise ValueError(f'The edge tuple {edge_tuple} is invalid.')
+                raise ValueError(f"The edge tuple {edge_tuple} is invalid.")
             edges_dicts.append(
                 {
-                    'left_vertex': edge_tuple[left_vertex],
-                    'right_vertex': edge_tuple[right_vertex],
-                    'weight': edge_tuple[weight]
+                    "left_vertex": edge_tuple[left_vertex],
+                    "right_vertex": edge_tuple[right_vertex],
+                    "weight": edge_tuple[weight]
                     if item_check_exists(edge_tuple, weight)
                     else 0,
-                    'orientation': edge_tuple[orientation]
+                    "orientation": edge_tuple[orientation]
                     if item_check_exists(edge_tuple, orientation)
-                    else '-',
-                    'label': edge_tuple[label]
+                    else "-",
+                    "label": edge_tuple[label]
                     if item_check_exists(edge_tuple, label)
                     else None,
                 }
@@ -139,14 +139,14 @@ class Graph(BasicGraph):
     def from_list(self, edges_tuples: List[Tuple[str, str, str, float, str]]):
         edges_dicts = self.get_edges_dicts_list(edges_tuples)
         for edge_dict in edges_dicts:
-            if edge_dict.get('left_vertex') not in self.vertices.keys():
-                self.add_vertex(Vertex(edge_dict['left_vertex']))
-            if edge_dict.get('right_vertex') not in self.vertices.keys():
-                self.add_vertex(Vertex(edge_dict['right_vertex']))
+            if edge_dict.get("left_vertex") not in self.vertices.keys():
+                self.add_vertex(Vertex(edge_dict["left_vertex"]))
+            if edge_dict.get("right_vertex") not in self.vertices.keys():
+                self.add_vertex(Vertex(edge_dict["right_vertex"]))
             edge_dict.update(
                 {
-                    'left_vertex': self.vertices[edge_dict['left_vertex']],
-                    'right_vertex': self.vertices[edge_dict['right_vertex']],
+                    "left_vertex": self.vertices[edge_dict["left_vertex"]],
+                    "right_vertex": self.vertices[edge_dict["right_vertex"]],
                 }
             )
             self.add_edge(Edge(**edge_dict))
@@ -169,21 +169,21 @@ class GraphReader:
             for line in lines[read_graph_vertices:]:
                 edge_tuple = line.strip().split()
                 if len(edge_tuple) <= 1 or len(edge_tuple) > 5:
-                    raise ValueError(f'The edge tuple {edge_tuple} is invalid.')
+                    raise ValueError(f"The edge tuple {edge_tuple} is invalid.")
                 if edge_tuple[left_vertex] not in graph.vertices.keys():
                     graph.add_vertex(Vertex(edge_tuple[left_vertex]))
                 if edge_tuple[right_vertex] not in graph.vertices.keys():
                     graph.add_vertex(Vertex(edge_tuple[right_vertex]))
                 edge_dict = {
-                    'left_vertex': graph.vertices[edge_tuple[left_vertex]],
-                    'right_vertex': graph.vertices[edge_tuple[right_vertex]],
-                    'weight': edge_tuple[weight]
+                    "left_vertex": graph.vertices[edge_tuple[left_vertex]],
+                    "right_vertex": graph.vertices[edge_tuple[right_vertex]],
+                    "weight": edge_tuple[weight]
                     if item_check_exists(edge_tuple, weight)
                     else 0,
-                    'orientation': edge_tuple[orientation]
+                    "orientation": edge_tuple[orientation]
                     if item_check_exists(edge_tuple, orientation)
-                    else '-',
-                    'label': edge_tuple[label]
+                    else "-",
+                    "label": edge_tuple[label]
                     if item_check_exists(edge_tuple, label)
                     else None,
                 }
@@ -191,9 +191,9 @@ class GraphReader:
         return graph
 
     def write(self, graph: Graph):
-        with open(self.__file_path, 'w') as file:
-            file.write(f'{graph.label}\n')
+        with open(self.__file_path, "w") as file:
+            file.write(f"{graph.label}\n")
             for edge in graph.edges.values():
                 file.write(
-                    f'{edge.left_vertex.label} {edge.right_vertex.label} {edge.weight} {edge.orientation} {edge.label}\n'
+                    f"{edge.left_vertex.label} {edge.right_vertex.label} {edge.weight} {edge.orientation} {edge.label}\n"
                 )
